@@ -10,14 +10,8 @@ export class Player extends Phaser.GameObjects.Sprite {
 
     init(): void {          
 
-        // physics
-        // this.width = Constants.playerWidth * 2;
-        // this.height = Constants.playerHeight * 2;
-        
+        // physics        
         this.scene.physics.world.enable(this);
-
-        // this.displayWidth = Constants.playerWidth;
-        // this.displayHeight = Constants.playerHeight;
 
         this.body
             .setSize(Constants.playerWidth, Constants.playerHeight)

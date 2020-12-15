@@ -8,6 +8,6 @@ export class Constants {
     public static get playerHeight(): number {return 32;}
     public static get playerOffsetX(): number {return 0;}
     public static get playerOffsetY(): number {return 32;}
-    public static get playerSpeed(): number {return 175;}
+    public static get playerSpeed(): number {return 120;}
     public static get playerDrawScale(): number {return 0.75;}
 }

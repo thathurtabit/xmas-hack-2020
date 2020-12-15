@@ -38,7 +38,7 @@ export default class Game extends Phaser.Scene {
     this.player = new Player({
       scene: this,
       x: Constants.windowCenterX,
-      y: Constants.windowCenterY,
+      y: Constants.windowCenterY + 130,
       key: "playerAtlas",
     });
     this.player.init();
