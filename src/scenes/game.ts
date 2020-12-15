@@ -4,6 +4,7 @@ import { Constants } from "../utils/constants";
 
 export default class Game extends Phaser.Scene {
   player: Player;
+  coffees: Phaser.GameObjects.Group;
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   camera: Phaser.Cameras.Scene2D.Camera;
 
@@ -13,6 +14,7 @@ export default class Game extends Phaser.Scene {
 
   preload(): void {
     this.loadTileMaps();
+    this.loadImages();
   }
 
   create(): void {
@@ -32,6 +34,7 @@ export default class Game extends Phaser.Scene {
 
     worldLayer.setCollisionByProperty({ collides: true });
 
+    // Where the player will start ("Spawn Point" should be an object in Tiled)
     const spawnPoint = map.findObject(
       "Objects",
       (obj) => obj.name === "Spawn Point"
@@ -44,6 +47,33 @@ export default class Game extends Phaser.Scene {
       key: "playerAtlas",
     });
     this.player.init();
+
+    // Manually adding in coffees, but this should be done through Tiled positioning
+    this.coffees = this.physics.add.group({
+      key: "coffee",
+      repeat: 5,
+      setXY: {
+        x: Constants.windowCenterX - 200,
+        y: Constants.windowCenterY + 150,
+        stepX: 70,
+      },
+    });
+
+    this.coffees.children
+      .getArray()
+      .forEach((coffee: Phaser.GameObjects.Image, index: number) => {
+        coffee.scale = 0.2;
+
+        this.tweens.add({
+          targets: coffee,
+          y: Constants.windowCenterY + 160,
+          duration: 1000,
+          ease: "Sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          delay: index * 100,
+        });
+      });
 
     this.player.body.velocity.normalize().scale(Constants.playerSpeed);
 
@@ -58,6 +88,7 @@ export default class Game extends Phaser.Scene {
 
     this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
+    this.physics.add.collider(this.player, worldLayer);
     this.physics.add.collider(this.player, worldLayer);
 
     // Debug
@@ -113,6 +144,10 @@ export default class Game extends Phaser.Scene {
     );
   }
 
+  private loadImages() {
+    this.load.image("coffee", "assets/images/coffee.png");
+  }
+
   private createAnims(anims) {
     anims.create({
       key: "player-left-walk",
@@ -160,12 +195,6 @@ export default class Game extends Phaser.Scene {
       }),
       frameRate: 10,
       repeat: -1,
-    });
-
-    anims.create({
-      key: "player-idle",
-      frames: [{ key: "playerSprites", frame: "alienBlue_stand.png" }],
-      frameRate: 10,
     });
   }
 }

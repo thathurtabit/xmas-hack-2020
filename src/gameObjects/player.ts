@@ -46,7 +46,6 @@ export class Player extends Phaser.GameObjects.Sprite {
     }
 
     stand(): void {
-        this.anims.play('player-front', true);
         this.body.setVelocity(0);
     }
 }

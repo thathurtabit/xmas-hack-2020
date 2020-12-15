@@ -1,4 +1,4 @@
-import * as util from "../utils/constants";
+import {Constants} from "../utils/constants";
 import "phaser";
 
 export default class Splash extends Phaser.Scene {
@@ -31,22 +31,22 @@ export default class Splash extends Phaser.Scene {
     this.add
       .shader(
         "RGB Shift Field",
-        util.windowCenterX - this.starField.centerX,
-        util.windowCenterY - this.starField.centerY,
+        Constants.windowCenterX - this.starField.centerX,
+        Constants.windowCenterY - this.starField.centerY,
         this.starField.width,
         this.starField.height
       )
       .setOrigin(0);
 
     const logo = this.add.image(
-      util.windowCenterX,
-      util.windowCenterY,
+      Constants.windowCenterX,
+      Constants.windowCenterY,
       this.logo.name
     );
 
     this.tweens.add({
       targets: logo,
-      y: util.windowCenterY + 100,
+      y: Constants.windowCenterY + 100,
       duration: 1500,
       ease: "Sine.inOut",
       yoyo: true,
