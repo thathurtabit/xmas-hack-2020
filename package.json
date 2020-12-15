@@ -8,7 +8,7 @@
     "dev": "rollup --config rollup.config.dev.js",
     "build": "rollup --config rollup.config.dist.js",
     "watch": "rollup --watch --config rollup.config.dev.js",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "lint": "eslint '*/**/*.{js,ts}' --quiet --fix",
     "postinstall": "husky install"
   },
   "repository": {
