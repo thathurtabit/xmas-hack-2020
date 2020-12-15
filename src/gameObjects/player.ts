@@ -16,15 +16,15 @@ export class Player extends Phaser.GameObjects.Sprite {
         
         this.scene.physics.world.enable(this);
 
-        this.displayWidth = Constants.playerWidth;
-        this.displayHeight = Constants.playerHeight;
+        // this.displayWidth = Constants.playerWidth;
+        // this.displayHeight = Constants.playerHeight;
 
         this.body
             .setSize(Constants.playerWidth, Constants.playerHeight)
             .setOffset(Constants.playerOffsetX, Constants.playerOffsetY);    
 
-        // this.displayOriginX = 0.5;
-        // this.displayOriginY = 0.5;
+        this.displayOriginX = 0.5;
+        this.displayOriginY = 0.5;
 
         this.setScale(Constants.playerDrawScale, Constants.playerDrawScale);
 

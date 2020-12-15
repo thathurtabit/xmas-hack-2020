@@ -1,6 +1,6 @@
-import * as util from "../utils/constants";
 import "phaser";
 import { Player } from "../gameObjects/player";
+import { Constants } from "../utils/constants";
 
 export default class Game extends Phaser.Scene {
   player: Player;
@@ -37,8 +37,8 @@ export default class Game extends Phaser.Scene {
 
     this.player = new Player({
       scene: this,
-      x: 300,
-      y: 600,
+      x: Constants.windowCenterX,
+      y: Constants.windowCenterY,
       key: "playerAtlas",
     });
     this.player.init();
@@ -56,36 +56,31 @@ export default class Game extends Phaser.Scene {
 
     this.physics.add.collider(this.player, worldLayer);
 
-
     // Debug
+    // Help text that has a "fixed" position on the screen
+    this.add
+      .text(16, 16, 'Arrow keys to move\nPress "D" to show hitboxes', {
+        font: "18px monospace",
+        fill: "#000000",
+        padding: { x: 20, y: 10 },
+        backgroundColor: "#ffffff",
+      })
+      .setScrollFactor(0)
+      .setDepth(30);
 
-      // Help text that has a "fixed" position on the screen
-  this.add
-  .text(16, 16, 'Arrow keys to move\nPress "D" to show hitboxes', {
-    font: "18px monospace",
-    fill: "#000000",
-    padding: { x: 20, y: 10 },
-    backgroundColor: "#ffffff"
-  })
-  .setScrollFactor(0)
-  .setDepth(30);
+    // Debug graphics
+    this.input.keyboard.once("keydown_D", (event) => {
+      // Turn on physics debugging to show player's hitbox
+      this.physics.world.createDebugGraphic();
 
-// Debug graphics
-this.input.keyboard.once("keydown_D", event => {
-  // Turn on physics debugging to show player's hitbox
-  this.physics.world.createDebugGraphic();
-
-  // Create worldLayer collision graphic above the player, but below the help text
-  const graphics = this.add
-    .graphics()
-    .setAlpha(0.75)
-    .setDepth(20);
-  worldLayer.renderDebug(graphics, {
-    tileColor: null, // Color of non-colliding tiles
-    collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-    faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-  });
-});
+      // Create worldLayer collision graphic above the player, but below the help text
+      const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
+      worldLayer.renderDebug(graphics, {
+        tileColor: null, // Color of non-colliding tiles
+        collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+        faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+      });
+    });
   }
 
   update(): void {
@@ -99,6 +94,7 @@ this.input.keyboard.once("keydown_D", event => {
     } else if (this.cursors.up.isDown) {
       this.player.moveUp();
     } else {
+      this.player.stand();
       this.player.anims.stop();
     }
   }
