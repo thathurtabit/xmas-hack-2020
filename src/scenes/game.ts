@@ -28,6 +28,8 @@ export default class Game extends Phaser.Scene {
     const worldLayer = map.createStaticLayer("World", tileset, 0, 0);
     const aboveLayer = map.createStaticLayer("Above Player", tileset, 0, 0);
 
+    aboveLayer.setDepth(10);
+
     worldLayer.setCollisionByProperty({ collides: true });
 
     const spawnPoint = map.findObject(
@@ -42,6 +44,8 @@ export default class Game extends Phaser.Scene {
       key: "playerAtlas",
     });
     this.player.init();
+
+    this.player.body.velocity.normalize().scale(Constants.playerSpeed);
 
     this.camera.startFollow(
       this.player,
