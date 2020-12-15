@@ -9,13 +9,13 @@ const config = {
     height: 600,
     pixelArt: true,
     physics: {
-      default: "arcade",
-      arcade: {
-        gravity: { y: 0 }
-      },
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+        },
     },
     debug: true,
-    scene: Game
+    scene: Game,
 };
 
 const game = new Phaser.Game(config);

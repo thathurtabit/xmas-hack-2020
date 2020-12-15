@@ -1,5 +1,5 @@
 import { Constants } from './../utils/constants';
-import "phaser";
+import 'phaser';
 
 export class Player extends Phaser.GameObjects.Sprite {
     body: Phaser.Physics.Arcade.Body;
@@ -8,14 +8,13 @@ export class Player extends Phaser.GameObjects.Sprite {
         super(params.scene, params.x, params.y, params.key, params.frame);
     }
 
-    init(): void {          
-
-        // physics        
+    init(): void {
+        // physics
         this.scene.physics.world.enable(this);
 
         this.body
             .setSize(Constants.playerWidth, Constants.playerHeight)
-            .setOffset(Constants.playerOffsetX, Constants.playerOffsetY);    
+            .setOffset(Constants.playerOffsetX, Constants.playerOffsetY);
 
         this.displayOriginX = 0.5;
         this.displayOriginY = 0.5;
