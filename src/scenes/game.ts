@@ -74,8 +74,6 @@ export default class Game extends Phaser.Scene {
     // Where the player will start ("Spawn Point" should be an object in Tiled)
     const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
 
-    this.createOfficeWorkers(floorLayer);
-
     this.player = new Player({
       scene: this,
       // @ts-ignore
@@ -85,6 +83,8 @@ export default class Game extends Phaser.Scene {
       key: Constants.playerId,
     });
     this.player.init();
+
+    this.createOfficeWorkers(floorLayer);
 
     // Manually adding in coffees, but this should be done through Tiled positioning
     this.coffees = this.physics.add.group({
@@ -183,6 +183,7 @@ export default class Game extends Phaser.Scene {
     });
 
     this.physics.add.collider(officeWorker, floorLayer);
+    this.physics.add.overlap(this.player, officeWorker, this.takeDamage, null, this);
 
     return officeWorker;
   }
