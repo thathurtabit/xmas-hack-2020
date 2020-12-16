@@ -13,7 +13,7 @@ export default class Game extends Phaser.Scene {
   isGameComplete: boolean;
   isPlayerDead: boolean;
   player: Player;
-  coffees: Phaser.GameObjects.Group;
+  coffees = [];
   healthBar: HealthBar;
   officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -74,6 +74,9 @@ export default class Game extends Phaser.Scene {
     // Where the player will start ("Spawn Point" should be an object in Tiled)
     const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
 
+    this.createOfficeWorkers(floorLayer);
+    this.spawnCoffee(map);
+
     this.player = new Player({
       scene: this,
       // @ts-ignore
@@ -99,19 +102,19 @@ export default class Game extends Phaser.Scene {
 
     this.healthBar = new HealthBar(this, 20, 20);
 
-    this.coffees.children.getArray().forEach((coffee: Phaser.GameObjects.Image, index: number) => {
+    this.coffees.forEach(coffee => coffee.children.getArray().forEach((coffee: Phaser.GameObjects.Image, index: number) => {
       coffee.scale = 0.2;
 
       this.tweens.add({
         targets: coffee,
-        y: Constants.windowCenterY - 100,
+        y: coffee.y - 10,
         duration: 1000,
         ease: 'Sine.inOut',
         yoyo: true,
         repeat: -1,
         delay: index * 100,
       });
-    });
+    }));
 
     this.player.body.velocity.normalize().scale(Constants.playerSpeed);
 
@@ -126,7 +129,7 @@ export default class Game extends Phaser.Scene {
     })
 
     // Trigger event on overlap
-    this.physics.add.overlap(this.player, this.coffees, this.takeDamage, null, this);
+    this.physics.add.overlap(this.player, this.coffees, this.drinkCoffee, null, this);
 
     // Debug graphics
     // Press 'D' during play to see debug mode
@@ -174,7 +177,7 @@ export default class Game extends Phaser.Scene {
         key: id,
     });
     officeWorker.init();
-    
+
     const follower = this.add.follower(path, 0, 0, id);
     follower.startFollow({
       repeat: -1,
@@ -301,5 +304,29 @@ export default class Game extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
+  }
+
+  private spawnCoffee(map: Phaser.Tilemaps.Tilemap) {
+    let coffee1 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 1');
+    let coffee2 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 2');
+    let coffee3 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 3');
+    let coffee4 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 4');
+    let coffee5 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 5');
+    let coffee6 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 6');
+
+    const coffeeSpawns = [coffee1, coffee2, coffee3, coffee4, coffee5, coffee6]
+
+    coffeeSpawns.forEach(coffee => {
+      this.coffees.push(this.physics.add.group({
+        key: 'coffee',
+        repeat: 0,
+        setXY: {
+          // @ts-ignore
+          x: coffee.x,
+          // @ts-ignore
+          y: coffee.y
+        },
+      }))
+    })
   }
 }
