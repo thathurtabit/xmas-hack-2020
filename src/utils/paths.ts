@@ -8,9 +8,9 @@ export class Paths {
         // path.lineTo(Constants.windowCenterX + 40, Constants.windowCenterY + 120);
         // path.lineTo(Constants.windowCenterX, Constants.windowCenterY + 120);
 
-        path.lineTo(200, 10);
-        path.lineTo(200, 200);
-        path.lineTo(10, 200);
+        path.lineTo(500, 10);
+        path.lineTo(500, 500);
+        path.lineTo(10, 500);
         path.lineTo(10, 10);
         // path.lineTo(10, 10);
         // path.lineTo(10, 10);
