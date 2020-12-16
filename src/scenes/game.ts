@@ -4,7 +4,7 @@ import { Constants } from '../utils/constants';
 import StaticTilemapLayer = Phaser.Tilemaps.StaticTilemapLayer;
 import { OfficeWorker } from '../gameObjects/officeWorker';
 import Path = Phaser.Curves.Path;
-import { ObjectAtlasMappings } from '../gameObjects/objectAtlasMappings';
+import { ObjectAtlasMappings } from '../utils/objectAtlasMappings';
 import PathFollower = Phaser.GameObjects.Components.PathFollower;
 import { HealthBar } from '../gameObjects/healthBar';
 
@@ -160,7 +160,7 @@ export default class Game extends Phaser.Scene {
         scene: this,
         x: Constants.windowCenterX,
         y: Constants.windowCenterY + 120,
-        key: Constants.officeWorkerOneId,
+        key: id,
     });
 
     officeWorker.init();
@@ -169,7 +169,7 @@ export default class Game extends Phaser.Scene {
       path,
       Constants.windowCenterX,
       Constants.windowCenterY + 120,
-      Constants.officeWorkerOneId,
+      id,
     );
 
     follower.startFollow({

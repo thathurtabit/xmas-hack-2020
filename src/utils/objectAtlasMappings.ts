@@ -1,5 +1,5 @@
 import AtlasJSONFileConfig = Phaser.Types.Loader.FileTypes.AtlasJSONFileConfig;
-import {Constants} from "../utils/constants";
+import {Constants} from "./constants";
 
 export class ObjectAtlasMappings {
 
