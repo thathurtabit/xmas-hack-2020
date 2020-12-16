@@ -15,6 +15,7 @@ export default class Game extends Phaser.Scene {
   player: Player;
   coffees = [];
   handGels = [];
+  faceMasks = [];
   healthBar: HealthBar;
   officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -77,6 +78,7 @@ export default class Game extends Phaser.Scene {
 
     this.spawnCoffee(map);
     this.spawnHandGel(map);
+    this.spawnFaceMasks(map);
 
     this.player = new Player({
       scene: this,
@@ -93,6 +95,7 @@ export default class Game extends Phaser.Scene {
     this.healthBar = new HealthBar(this, 20, 20);
     this.addCoffee();
     this.addHandGel();
+    this.addFaceMask();
 
     this.player.body.velocity.normalize().scale(Constants.playerSpeed);
 
@@ -109,6 +112,7 @@ export default class Game extends Phaser.Scene {
     // Trigger event on overlap
     this.physics.add.overlap(this.player, this.coffees, this.drinkCoffee, null, this);
     this.physics.add.overlap(this.player, this.handGels, this.sanitise, null, this);
+    this.physics.add.overlap(this.player, this.faceMasks, this.sanitise, null, this);
 
     // Debug graphics
     // Press 'D' during play to see debug mode
@@ -152,6 +156,22 @@ export default class Game extends Phaser.Scene {
       this.tweens.add({
         targets: handGel,
         y: handGel.y - 10,
+        duration: 1000,
+        ease: 'Sine.inOut',
+        yoyo: true,
+        repeat: -1,
+        delay: index * 100,
+      });
+    }));
+  }
+
+  private addFaceMask() {
+    this.faceMasks.forEach(faceMask => faceMask.children.getArray().forEach((faceMask: Phaser.GameObjects.Image, index: number) => {
+      faceMask.scale = 0.1;
+
+      this.tweens.add({
+        targets: faceMask,
+        y: faceMask.y - 10,
         duration: 1000,
         ease: 'Sine.inOut',
         yoyo: true,
@@ -280,6 +300,7 @@ export default class Game extends Phaser.Scene {
   private loadImages() {
     this.load.image('coffee', 'assets/images/coffee.png');
     this.load.image('hand gel', 'assets/images/soap.png');
+    this.load.image('face mask', 'assets/images/mask.png');
   }
 
   private createAnims(anims, objectId) {
@@ -373,6 +394,26 @@ export default class Game extends Phaser.Scene {
           x: handGel.x,
           // @ts-ignore
           y: handGel.y
+        },
+      }))
+    })
+  }
+
+  private spawnFaceMasks(map: Phaser.Tilemaps.Tilemap) {
+    const faceMask1 = map.findObject('Objects', (obj) => obj.name === 'face mask 1');
+    const faceMask2 = map.findObject('Objects', (obj) => obj.name === 'face mask 2');
+
+    const faceMaskSpawns = [faceMask1, faceMask2]
+
+    faceMaskSpawns.forEach(faceMask => {
+      this.faceMasks.push(this.physics.add.group({
+        key: 'face mask',
+        repeat: 0,
+        setXY: {
+          // @ts-ignore
+          x: faceMask.x,
+          // @ts-ignore
+          y: faceMask.y
         },
       }))
     })

@@ -181,6 +181,30 @@
                  "width":0,
                  "x":432.678059863677,
                  "y":150.15311666502
+                }, 
+                {
+                 "height":0,
+                 "id":18,
+                 "name":"face mask 1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1356.3172972439,
+                 "y":1550.92363923738
+                }, 
+                {
+                 "height":0,
+                 "id":20,
+                 "name":"face mask 2",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":635.187197471105,
+                 "y":1395.83127531364
                 }],
          "opacity":1,
          "properties":[
@@ -483,7 +507,7 @@
          "y":0
         }],
  "nextlayerid":23,
- "nextobjectid":18,
+ "nextobjectid":21,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.3",
