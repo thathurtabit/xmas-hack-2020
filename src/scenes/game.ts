@@ -8,14 +8,17 @@ import Path = Phaser.Curves.Path;
 import { ObjectAtlasMappings } from '../utils/objectAtlasMappings';
 import PathFollower = Phaser.GameObjects.Components.PathFollower;
 import { HealthBar } from '../gameObjects/healthBar';
+import { Coffee } from '../gameObjects/coffee';
+import { HandGel } from '../gameObjects/handGel';
+import { FaceMask } from '../gameObjects/faceMask';
 
 export default class Game extends Phaser.Scene {
-  isGameComplete: boolean;
-  isPlayerDead: boolean;
+  isGameComplete = false;
+  isPlayerDead = false;
   player: Player;
-  coffees = [];
-  handGels = [];
-  faceMasks = [];
+  coffees: Phaser.GameObjects.Group;
+  handGels: Phaser.GameObjects.Group;
+  faceMasks: Phaser.GameObjects.Group;
   healthBar: HealthBar;
   officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -23,9 +26,6 @@ export default class Game extends Phaser.Scene {
 
   constructor() {
     super('game');
-
-    this.isGameComplete = false;
-    this.isPlayerDead = false;
   }
 
   preload(): void {
@@ -37,6 +37,9 @@ export default class Game extends Phaser.Scene {
     this.createAnims(this.anims, Constants.playerId);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.camera = this.cameras.main;
+    this.coffees = this.add.group();
+    this.handGels = this.add.group();
+    this.faceMasks = this.add.group();
 
     const map = this.make.tilemap({ key: 'map' });
 
@@ -49,7 +52,16 @@ export default class Game extends Phaser.Scene {
     const wallTileset = map.addTilesetImage('walls_floors', 'walls');
     const objectsTileset = map.addTilesetImage('top-down interior v2', 'objects');
 
-    const tilesets = [carpetTileset, carTileset1, carTileset2, carTileset3, interiorsTileset, officeTileset, wallTileset, objectsTileset];
+    const tilesets = [
+      carpetTileset,
+      carTileset1,
+      carTileset2,
+      carTileset3,
+      interiorsTileset,
+      officeTileset,
+      wallTileset,
+      objectsTileset,
+    ];
 
     const floorLayer = map.createStaticLayer('Floor', tilesets, 0, 0);
     const roomsLayer = map.createStaticLayer('Rooms', tilesets, 0, 0);
@@ -70,22 +82,30 @@ export default class Game extends Phaser.Scene {
     const postStationaryLayer = map.createStaticLayer('post stationary', tilesets, 0, 0);
     const TopChairsLayer = map.createStaticLayer('Top chairs', tilesets, 0, 0);
 
-    const collidingLayers: Array<StaticTilemapLayer> = [balconyLayer, edgesLayer, conciergeLayer, ChairsLayer, TablesLayer, carsLayer, DecorLayer, handGelLayer, CoffeeMachineLayer, ToiletLayer, printerLayer, postStationaryLayer, TopChairsLayer]
+    const collidingLayers: Array<StaticTilemapLayer> = [
+      balconyLayer,
+      edgesLayer,
+      conciergeLayer,
+      ChairsLayer,
+      TablesLayer,
+      carsLayer,
+      DecorLayer,
+      handGelLayer,
+      CoffeeMachineLayer,
+      ToiletLayer,
+      printerLayer,
+      postStationaryLayer,
+      TopChairsLayer,
+    ];
     this.setCollision(collidingLayers);
 
-    // Where the player will start ("Spawn Point" should be an object in Tiled)
-    const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
-
-    this.spawnCoffee(map);
-    this.spawnHandGel(map);
-    this.spawnFaceMasks(map);
-
+    const playerSpawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
     this.player = new Player({
       scene: this,
       // @ts-ignore
-      x: spawnPoint.x,
+      x: playerSpawnPoint.x,
       // @ts-ignore
-      y: spawnPoint.y,
+      y: playerSpawnPoint.y,
       key: Constants.playerId,
     });
     this.player.init();
@@ -93,9 +113,13 @@ export default class Game extends Phaser.Scene {
     this.createOfficeWorkers(floorLayer, collidingLayers);
 
     this.healthBar = new HealthBar(this, 20, 20);
-    this.addCoffee();
-    this.addHandGel();
-    this.addFaceMask();
+    // this.addCoffee();
+    // this.addHandGel();
+    // this.addFaceMask();
+
+    this.spawnCoffees(map);
+    this.spawnHandGels(map);
+    this.spawnFaceMasks(map);
 
     this.player.body.velocity.normalize().scale(Constants.playerSpeed);
 
@@ -105,9 +129,9 @@ export default class Game extends Phaser.Scene {
 
     // Add collisions to game objects
     this.physics.add.collider(this.player, floorLayer);
-    collidingLayers.forEach(layer => {
+    collidingLayers.forEach((layer) => {
       this.physics.add.collider(this.player, layer);
-    })
+    });
 
     // Trigger event on overlap
     this.physics.add.overlap(this.player, this.coffees, this.drinkCoffee, null, this);
@@ -122,112 +146,64 @@ export default class Game extends Phaser.Scene {
 
       // Create worldLayer collision graphic above the player, but below the help text
       const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
-      collidingLayers.forEach(layer => {
+      collidingLayers.forEach((layer) => {
         layer.renderDebug(graphics, {
           tileColor: null, // Color of non-colliding tiles
           collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
           faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
         });
-      })
+      });
     });
   }
 
-  private addCoffee() {
-    this.coffees.forEach(coffee => coffee.children.getArray().forEach((coffee: Phaser.GameObjects.Image, index: number) => {
-      coffee.scale = 0.2;
-
-      this.tweens.add({
-        targets: coffee,
-        y: coffee.y - 10,
-        duration: 1000,
-        ease: 'Sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        delay: index * 100,
-      });
-    }));
-  }
-
-
-  private addHandGel() {
-    this.handGels.forEach(handGel => handGel.children.getArray().forEach((handGel: Phaser.GameObjects.Image, index: number) => {
-      handGel.scale = 2;
-
-      this.tweens.add({
-        targets: handGel,
-        y: handGel.y - 10,
-        duration: 1000,
-        ease: 'Sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        delay: index * 100,
-      });
-    }));
-  }
-
-  private addFaceMask() {
-    this.faceMasks.forEach(faceMask => faceMask.children.getArray().forEach((faceMask: Phaser.GameObjects.Image, index: number) => {
-      faceMask.scale = 0.1;
-
-      this.tweens.add({
-        targets: faceMask,
-        y: faceMask.y - 10,
-        duration: 1000,
-        ease: 'Sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        delay: index * 100,
-      });
-    }));
-  }
-
   private createOfficeWorkers(floorLayer, collidingLayers) {
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorkerOneId,
+        Paths.getPath1(this),
+        0,
+        10 * 1000,
+        100,
+        100,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorkerOneId, 
-      Paths.getPath1(this),
-      0,
-      10 * 1000,
-      100,
-      100
-    ));
-
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorkerTwoId, 
-      Paths.getPath1(this),
-      0.5,
-      8 * 1000,
-      500,
-      500
-    ));
-
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorkerTwoId,
+        Paths.getPath1(this),
+        0.5,
+        8 * 1000,
+        500,
+        500,
+      ),
+    );
   }
 
   private createOfficeWorker(floorLayer, collidingLayers, id, path, startAt, duration, x, y): OfficeWorker {
     this.createAnims(this.anims, id);
 
     const officeWorker = new OfficeWorker({
-        scene: this,
-        key: id,
-        x: x,
-        y: y
+      scene: this,
+      key: id,
+      x: x,
+      y: y,
     });
     officeWorker.init();
-    
+
     officeWorker.body.velocity.normalize().scale(Constants.playerSpeed);
 
     // Add collisions to game objects
     this.physics.add.collider(officeWorker, floorLayer);
-    collidingLayers.forEach(layer => {
+    collidingLayers.forEach((layer) => {
       this.physics.add.collider(officeWorker, layer);
-    })
+    });
 
     this.physics.add.overlap(this.player, officeWorker, this.onOfficeWorkerCollision, null, this);
-
 
     // const follower = this.add.follower(path, 0, 0, id);
     // follower.startFollow({
@@ -243,7 +219,9 @@ export default class Game extends Phaser.Scene {
   }
 
   private onOfficeWorkerCollision(player: Player, officeWorker): void {
-    console.log("COLLISION!")
+    console.log('COLLISION!');
+    this.decreaseHealth(20);
+
     // if (officeWorker.isFollowing()) {
     //   officeWorker.pauseFollow();
     //   this.decreaseHealth(10);
@@ -257,7 +235,9 @@ export default class Game extends Phaser.Scene {
   }
 
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
-    collidingLayers.forEach(layer => {layer.setCollisionByProperty({collides:true})})
+    collidingLayers.forEach((layer) => {
+      layer.setCollisionByProperty({ collides: true });
+    });
   }
 
   update(): void {
@@ -277,18 +257,19 @@ export default class Game extends Phaser.Scene {
     }
   }
 
-  private drinkCoffee(player: Player, coffee): void {
-    coffee.disableBody(true, true);
+  private drinkCoffee(player: Player, coffee: Coffee): void {
+    coffee.destroy(true);
     player.speedUp();
   }
 
-  private takeDamage(player: Player, item): void {
-    item.disableBody(true, true);
+  private takeDamage(player: Player, collidingItem): void {
+    //item.disableBody(true, true);
+    // Switch between different health decrements based on collidingItem
     this.decreaseHealth(20);
   }
 
   private sanitise(player: Player, item): void {
-    item.disableBody(true, true);
+    item.destroy(true);
     this.decreaseHealth(-20);
   }
 
@@ -300,7 +281,7 @@ export default class Game extends Phaser.Scene {
   }
 
   private onGameOver(): void {
-    alert('GAME OVER: COVID WINS');
+    this.scene.start('gameOver');
   }
 
   private loadTileMaps() {
@@ -314,7 +295,7 @@ export default class Game extends Phaser.Scene {
     this.load.image('objects', 'assets/office/map-files/images/top-down interior v2.png');
 
     this.load.tilemapTiledJSON('map', 'assets/office/office-map.json');
-    this.load.atlas(ObjectAtlasMappings.getMappings)
+    this.load.atlas(ObjectAtlasMappings.getMappings);
   }
 
   private loadImages() {
@@ -373,7 +354,7 @@ export default class Game extends Phaser.Scene {
     });
   }
 
-  private spawnCoffee(map: Phaser.Tilemaps.Tilemap) {
+  private spawnCoffees(map: Phaser.Tilemaps.Tilemap) {
     const coffee1 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 1');
     const coffee2 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 2');
     const coffee3 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 3');
@@ -381,61 +362,39 @@ export default class Game extends Phaser.Scene {
     const coffee5 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 5');
     const coffee6 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 6');
 
-    const coffeeSpawns = [coffee1, coffee2, coffee3, coffee4, coffee5, coffee6]
+    const coffeeSpawns = [coffee1, coffee2, coffee3, coffee4, coffee5, coffee6];
 
-    coffeeSpawns.forEach(coffee => {
-      this.coffees.push(this.physics.add.group({
-        key: 'coffee',
-        repeat: 0,
-        setXY: {
-          // @ts-ignore
-          x: coffee.x,
-          // @ts-ignore
-          y: coffee.y
-        },
-      }))
-    })
+    coffeeSpawns.forEach((coffee, index: number) => {
+      // @ts-ignore
+      this.coffees.add(new Coffee({ scene: this, x: coffee.x, y: coffee.y, texture: 'coffee', delay: index }));
+    });
   }
 
-  private spawnHandGel(map: Phaser.Tilemaps.Tilemap) {
+  private spawnHandGels(map: Phaser.Tilemaps.Tilemap) {
     const handGel1 = map.findObject('Objects', (obj) => obj.name === 'hand gel 1');
     const handGel2 = map.findObject('Objects', (obj) => obj.name === 'hand gel 2');
     const handGel3 = map.findObject('Objects', (obj) => obj.name === 'hand gel 3');
     const handGel4 = map.findObject('Objects', (obj) => obj.name === 'hand gel 4');
 
-    const handGelSpawns = [handGel1, handGel2, handGel3, handGel4]
+    const handGelSpawns = [handGel1, handGel2, handGel3, handGel4];
 
-    handGelSpawns.forEach(handGel => {
-      this.handGels.push(this.physics.add.group({
-        key: 'hand gel',
-        repeat: 0,
-        setXY: {
-          // @ts-ignore
-          x: handGel.x,
-          // @ts-ignore
-          y: handGel.y
-        },
-      }))
-    })
+    handGelSpawns.forEach((handGel, index: number) => {
+      // @ts-ignore
+      this.handGels.add(new HandGel({ scene: this, x: handGel.x, y: handGel.y, texture: 'hand gel', delay: index }));
+    });
   }
 
   private spawnFaceMasks(map: Phaser.Tilemaps.Tilemap) {
     const faceMask1 = map.findObject('Objects', (obj) => obj.name === 'face mask 1');
     const faceMask2 = map.findObject('Objects', (obj) => obj.name === 'face mask 2');
 
-    const faceMaskSpawns = [faceMask1, faceMask2]
+    const faceMaskSpawns = [faceMask1, faceMask2];
 
-    faceMaskSpawns.forEach(faceMask => {
-      this.faceMasks.push(this.physics.add.group({
-        key: 'face mask',
-        repeat: 0,
-        setXY: {
-          // @ts-ignore
-          x: faceMask.x,
-          // @ts-ignore
-          y: faceMask.y
-        },
-      }))
-    })
+    faceMaskSpawns.forEach((faceMask, index: number) => {
+      this.faceMasks.add(
+        // @ts-ignore
+        new FaceMask({ scene: this, x: faceMask.x, y: faceMask.y, texture: 'face mask', delay: index }),
+      );
+    });
   }
 }

@@ -1,5 +1,7 @@
 import 'phaser';
 import Game from './scenes/game';
+import GameOver from './scenes/gameOver';
+import Splash from './scenes/splash';
 //import Splash from './scenes/splash';
 
 const config = {
@@ -15,7 +17,7 @@ const config = {
     },
   },
   debug: true,
-  scene: Game,
+  scene: [Splash, Game, GameOver],
 };
 
 const game = new Phaser.Game(config);
