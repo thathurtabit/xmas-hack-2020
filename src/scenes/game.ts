@@ -15,7 +15,6 @@ export default class Game extends Phaser.Scene {
   player: Player;
   coffees = [];
   healthBar: HealthBar;
-  immnune: boolean = false;
   officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   camera: Phaser.Cameras.Scene2D.Camera;
@@ -181,15 +180,15 @@ export default class Game extends Phaser.Scene {
   }
 
   private onOfficeWorkerCollision(player: Player, officeWorker): void {
-    officeWorker.pauseFollow();
-    this.decreaseHealth(10);
-    this.immnune = true;
+    if (officeWorker.isFollowing()) {
+      officeWorker.pauseFollow();
+      this.decreaseHealth(10);
 
-    this.time.delayedCall(3000, this.resumePausedOfficeWorker, [ officeWorker ], this);
+      this.time.delayedCall(3000, this.resumePausedOfficeWorker, [ officeWorker ], this);
+    }
   }
 
   private resumePausedOfficeWorker(officeWorker) {
-    this.immnune = false;
     officeWorker.resumeFollow();
   }
 
@@ -225,11 +224,9 @@ export default class Game extends Phaser.Scene {
   }
 
   private decreaseHealth(amount) {
-    if (!this.immnune) {
-      if (this.healthBar.decrease(amount)) {
-        this.isPlayerDead = true;
-        this.onGameOver();
-      }
+    if (this.healthBar.decrease(amount)) {
+      this.isPlayerDead = true;
+      this.onGameOver();
     }
   }
 
