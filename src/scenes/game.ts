@@ -1,6 +1,7 @@
 import 'phaser';
 import { Player } from '../gameObjects/player';
 import { Constants } from '../utils/constants';
+import StaticTilemapLayer = Phaser.Tilemaps.StaticTilemapLayer;
 import { OfficeWorker } from '../gameObjects/officeWorker';
 import Path = Phaser.Curves.Path;
 import { ObjectAtlasMappings } from '../gameObjects/objectAtlasMappings';
@@ -39,15 +40,38 @@ export default class Game extends Phaser.Scene {
 
     const map = this.make.tilemap({ key: 'map' });
 
-    const tileset = map.addTilesetImage('tuxmon-sample-32px-extruded', 'tiles');
+    const carpetTileset = map.addTilesetImage('Carpet', 'carpet');
+    const carTileset1 = map.addTilesetImage('campervan', 'cars1');
+    const carTileset2 = map.addTilesetImage('cars copy 2', 'cars2');
+    const carTileset3 = map.addTilesetImage('cars copy 3', 'cars3');
+    const interiorsTileset = map.addTilesetImage('Interiors_16x16', 'interiors');
+    const officeTileset = map.addTilesetImage('office', 'office');
+    const wallTileset = map.addTilesetImage('walls_floors', 'walls');
+    const objectsTileset = map.addTilesetImage('top-down interior v2', 'objects');
 
-    const belowLayer = map.createStaticLayer('Below Player', tileset, 0, 0);
-    const worldLayer = map.createStaticLayer('World', tileset, 0, 0);
-    const aboveLayer = map.createStaticLayer('Above Player', tileset, 0, 0);
+    const tilesets = [carpetTileset, carTileset1, carTileset2, carTileset3, interiorsTileset, officeTileset, wallTileset, objectsTileset];
 
-    aboveLayer.setDepth(10);
+    const floorLayer = map.createStaticLayer('Floor', tilesets, 0, 0);
+    const roomsLayer = map.createStaticLayer('Rooms', tilesets, 0, 0);
+    const balconyLayer = map.createStaticLayer('balcony', tilesets, 0, 0);
+    const edgesLayer = map.createStaticLayer('edges', tilesets, 0, 0);
+    const DoorsAndWindowsLayer = map.createStaticLayer('DoorsAndWindows', tilesets, 0, 0);
+    const conciergeLayer = map.createStaticLayer('concierge', tilesets, 0, 0);
+    const liftsLayer = map.createStaticLayer('lifts', tilesets, 0, 0);
+    const UserDeskLayer = map.createStaticLayer('User desk', tilesets, 0, 0);
+    const ChairsLayer = map.createStaticLayer('Chairs', tilesets, 0, 0);
+    const TablesLayer = map.createStaticLayer('Tables', tilesets, 0, 0);
+    const carsLayer = map.createStaticLayer('cars', tilesets, 0, 0);
+    const DecorLayer = map.createStaticLayer('Decor', tilesets, 0, 0);
+    const handGelLayer = map.createStaticLayer('hand gel', tilesets, 0, 0);
+    const CoffeeMachineLayer = map.createStaticLayer('Coffee Machine', tilesets, 0, 0);
+    const ToiletLayer = map.createStaticLayer('Toilet', tilesets, 0, 0);
+    const printerLayer = map.createStaticLayer('printer', tilesets, 0, 0);
+    const postStationaryLayer = map.createStaticLayer('post stationary', tilesets, 0, 0);
+    const TopChairsLayer = map.createStaticLayer('Top chairs', tilesets, 0, 0);
 
-    worldLayer.setCollisionByProperty({ collides: true });
+    const collidingLayers: Array<StaticTilemapLayer> = [balconyLayer, edgesLayer, conciergeLayer, ChairsLayer, TablesLayer, carsLayer, DecorLayer, handGelLayer, CoffeeMachineLayer, ToiletLayer, printerLayer, postStationaryLayer, TopChairsLayer]
+    this.setCollision(collidingLayers);
 
     // Where the player will start ("Spawn Point" should be an object in Tiled)
     const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
@@ -87,8 +111,10 @@ export default class Game extends Phaser.Scene {
 
     this.player = new Player({
       scene: this,
-      x: Constants.windowCenterX,
-      y: Constants.windowCenterY + 130,
+      // @ts-ignore
+      x: spawnPoint.x,
+      // @ts-ignore
+      y: spawnPoint.y,
       key: Constants.playerId,
     });
     this.player.init();
@@ -128,11 +154,14 @@ export default class Game extends Phaser.Scene {
     this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
     // Add collisions to game objects
-    this.physics.add.collider(this.player, worldLayer);
+    this.physics.add.collider(this.player, floorLayer);
 
     // Trigger event on overlap
     this.physics.add.overlap(this.player, this.coffees, this.takeDamage, null, this);
-    this.physics.add.collider(this.officeWorkers[0], worldLayer);
+    this.physics.add.collider(this.officeWorkers[0], floorLayer);
+    collidingLayers.forEach(layer => {
+      this.physics.add.collider(this.player, layer);
+    })
 
     // Debug graphics
     // Press 'D' during play to see debug mode
@@ -142,12 +171,18 @@ export default class Game extends Phaser.Scene {
 
       // Create worldLayer collision graphic above the player, but below the help text
       const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
-      worldLayer.renderDebug(graphics, {
-        tileColor: null, // Color of non-colliding tiles
-        collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-      });
+      collidingLayers.forEach(layer => {
+        layer.renderDebug(graphics, {
+          tileColor: null, // Color of non-colliding tiles
+          collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+          faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+        });
+      })
     });
+  }
+
+  private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
+    collidingLayers.forEach(layer => layer.setCollisionByProperty({collides:true}, true))
   }
 
   update(): void {
@@ -186,9 +221,17 @@ export default class Game extends Phaser.Scene {
   }
 
   private loadTileMaps() {
-    this.load.image('tiles', 'assets/tilesets/tuxmon-sample-32px-extruded.png');
-    this.load.tilemapTiledJSON('map', 'assets/tilemaps/tuxemon-town.json');
-    this.load.atlas([ObjectAtlasMappings.playerAtlasMapping, ObjectAtlasMappings.officeWorkerOneAtlasMapping]);
+    this.load.image('carpet', 'assets/office/map-files/images/Carpet.png');
+    this.load.image('cars1', 'assets/office/map-files/images/cars copy.png');
+    this.load.image('cars2', 'assets/office/map-files/images/cars copy 2.png');
+    this.load.image('cars3', 'assets/office/map-files/images/cars copy 3.png');
+    this.load.image('interiors', 'assets/office/map-files/images/Interiors_16x16.png');
+    this.load.image('office', 'assets/office/map-files/images/Office_interiors_shadowless_16x16.png');
+    this.load.image('walls', 'assets/office/map-files/images/Tilesets_16x16.png');
+    this.load.image('objects', 'assets/office/map-files/images/top-down interior v2.png');
+
+    this.load.tilemapTiledJSON('map', 'assets/office/office-map.json');
+    this.load.atlas([ObjectAtlasMappings.playerAtlasMapping, ObjectAtlasMappings.officeWorkerOneAtlasMapping])
   }
 
   private loadImages() {
