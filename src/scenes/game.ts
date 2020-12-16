@@ -51,7 +51,7 @@ export default class Game extends Phaser.Scene {
       repeat: 5,
       setXY: {
         x: Constants.windowCenterX - 200,
-        y: Constants.windowCenterY + 150,
+        y: Constants.windowCenterY - 90,
         stepX: 70,
       },
     });
@@ -61,7 +61,7 @@ export default class Game extends Phaser.Scene {
 
       this.tweens.add({
         targets: coffee,
-        y: Constants.windowCenterY + 160,
+        y: Constants.windowCenterY - 100,
         duration: 1000,
         ease: 'Sine.inOut',
         yoyo: true,
@@ -76,12 +76,15 @@ export default class Game extends Phaser.Scene {
 
     this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
+    // Add collisions to game objects
     this.physics.add.collider(this.player, worldLayer);
-    this.physics.add.collider(this.player, worldLayer);
+
+    // Trigger event on overlap
+    this.physics.add.overlap(this.player, this.coffees, this.drinkCoffee, null, this);
 
     // Debug graphics
     // Press 'D' during play to see debug mode
-    this.input.keyboard.once('keydown_D', (event) => {
+    this.input.keyboard.once('keydown_D', () => {
       // Turn on physics debugging to show player's hitbox
       this.physics.world.createDebugGraphic();
 
@@ -109,6 +112,11 @@ export default class Game extends Phaser.Scene {
       this.player.stand();
       this.player.anims.stop();
     }
+  }
+
+  private drinkCoffee(player: Player, coffee): void {
+    coffee.disableBody(true, true);
+    player.speedUp();
   }
 
   private loadTileMaps() {
