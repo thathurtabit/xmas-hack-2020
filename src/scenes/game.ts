@@ -167,7 +167,7 @@ export default class Game extends Phaser.Scene {
   private createOfficeWorker(floorLayer, id, path, startAt): OfficeWorker {
     this.createAnims(this.anims, id);
 
-    let officeWorker = new OfficeWorker({
+    const officeWorker = new OfficeWorker({
         scene: this,
         // x: Constants.windowCenterX,
         // y: Constants.windowCenterY + 120,
@@ -176,7 +176,7 @@ export default class Game extends Phaser.Scene {
 
     officeWorker.init();
 
-    let follower = this.add.follower(
+    const follower = this.add.follower(
       path,
       0,
       0,
