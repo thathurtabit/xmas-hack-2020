@@ -1,6 +1,7 @@
 import 'phaser';
 import { Player } from '../gameObjects/player';
 import { Constants } from '../utils/constants';
+import { Paths } from '../utils/paths';
 import StaticTilemapLayer = Phaser.Tilemaps.StaticTilemapLayer;
 import { OfficeWorker } from '../gameObjects/officeWorker';
 import Path = Phaser.Curves.Path;
@@ -146,11 +147,12 @@ export default class Game extends Phaser.Scene {
   }
 
   private createOfficeWorkers(floorLayer) {
-    let path1 = this.add.path(Constants.windowCenterX, Constants.windowCenterY + 120);
-    path1.lineTo(Constants.windowCenterX + 40, Constants.windowCenterY + 120);
-    path1.lineTo(Constants.windowCenterX, Constants.windowCenterY + 120);
 
-    this.officeWorkers.push(this.createOfficeWorker(floorLayer, Constants.officeWorkerOneId, path1));
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      Constants.officeWorkerOneId, 
+      Paths.getPath1(this)
+      ));
   }
 
   private createOfficeWorker(floorLayer, id, path): OfficeWorker {
