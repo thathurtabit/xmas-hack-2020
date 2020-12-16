@@ -1,22 +1,29 @@
 import 'phaser';
 import { Player } from '../gameObjects/player';
 import { Constants } from '../utils/constants';
-import {OfficeWorker} from "../gameObjects/officeWorker";
+import { OfficeWorker } from '../gameObjects/officeWorker';
 import Path = Phaser.Curves.Path;
-import {ObjectAtlasMappings} from "../gameObjects/objectAtlasMappings";
+import { ObjectAtlasMappings } from '../gameObjects/objectAtlasMappings';
 import PathFollower = Phaser.GameObjects.Components.PathFollower;
+import { HealthBar } from '../gameObjects/healthBar';
 
 export default class Game extends Phaser.Scene {
+  isGameComplete: boolean;
+  isPlayerDead: boolean;
   player: Player;
   coffees: Phaser.GameObjects.Group;
-  officeWorkers: OfficeWorker[] = []
+  healthBar: HealthBar;
+  officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   camera: Phaser.Cameras.Scene2D.Camera;
-  officeWorker1Path: Path
-  follower: PathFollower
+  officeWorker1Path: Path;
+  follower: PathFollower;
 
   constructor() {
     super('game');
+
+    this.isGameComplete = false;
+    this.isPlayerDead = false;
   }
 
   preload(): void {
@@ -45,30 +52,38 @@ export default class Game extends Phaser.Scene {
     // Where the player will start ("Spawn Point" should be an object in Tiled)
     const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
 
-    this.officeWorker1Path = this.add.path(Constants.windowCenterX, Constants.windowCenterY + 120)
-    this.officeWorker1Path.lineTo(Constants.windowCenterX + 40, Constants.windowCenterY + 120)
-    this.officeWorker1Path.lineTo(Constants.windowCenterX, Constants.windowCenterY + 120)
+    this.officeWorker1Path = this.add.path(Constants.windowCenterX, Constants.windowCenterY + 120);
+    this.officeWorker1Path.lineTo(Constants.windowCenterX + 40, Constants.windowCenterY + 120);
+    this.officeWorker1Path.lineTo(Constants.windowCenterX, Constants.windowCenterY + 120);
 
-    this.officeWorkers.push(new OfficeWorker({
-      scene: this,
-      x: Constants.windowCenterX,
-      y: Constants.windowCenterY + 120,
-      key: Constants.officeWorkerOneId}))
+    this.officeWorkers.push(
+      new OfficeWorker({
+        scene: this,
+        x: Constants.windowCenterX,
+        y: Constants.windowCenterY + 120,
+        key: Constants.officeWorkerOneId,
+      }),
+    );
     this.officeWorkers[0].init();
 
-    this.follower = this.add.follower(this.officeWorker1Path, Constants.windowCenterX, Constants.windowCenterY + 120, Constants.officeWorkerOneId);
+    this.follower = this.add.follower(
+      this.officeWorker1Path,
+      Constants.windowCenterX,
+      Constants.windowCenterY + 120,
+      Constants.officeWorkerOneId,
+    );
     this.follower.startFollow({
       yoyo: true,
-      repeat: -1
-    })
+      repeat: -1,
+    });
 
     // TODO: Make this work - for looping NPC paths
     this.tweens.add({
       targets: this.follower,
       t: 1,
       duration: 10000,
-      repeat: -1
-    })
+      repeat: -1,
+    });
 
     this.player = new Player({
       scene: this,
@@ -88,6 +103,8 @@ export default class Game extends Phaser.Scene {
         stepX: 70,
       },
     });
+
+    this.healthBar = new HealthBar(this, 20, 20);
 
     this.coffees.children.getArray().forEach((coffee: Phaser.GameObjects.Image, index: number) => {
       coffee.scale = 0.2;
@@ -114,8 +131,8 @@ export default class Game extends Phaser.Scene {
     this.physics.add.collider(this.player, worldLayer);
 
     // Trigger event on overlap
-    this.physics.add.overlap(this.player, this.coffees, this.drinkCoffee, null, this);
-    this.physics.add.collider(this.officeWorkers[0], worldLayer)
+    this.physics.add.overlap(this.player, this.coffees, this.takeDamage, null, this);
+    this.physics.add.collider(this.officeWorkers[0], worldLayer);
 
     // Debug graphics
     // Press 'D' during play to see debug mode
@@ -134,7 +151,7 @@ export default class Game extends Phaser.Scene {
   }
 
   update(): void {
-    this.officeWorkers[0].moveRight()
+    this.officeWorkers[0].moveRight();
     // Move player / camera
     if (this.cursors.left.isDown) {
       this.player.moveLeft();
@@ -155,13 +172,23 @@ export default class Game extends Phaser.Scene {
     player.speedUp();
   }
 
+  private takeDamage(player: Player, item): void {
+    item.disableBody(true, true);
+
+    if (this.healthBar.decrease(20)) {
+      this.isPlayerDead = true;
+      this.onGameOver();
+    }
+  }
+
+  private onGameOver(): void {
+    alert('GAME OVER: COVID WINS');
+  }
+
   private loadTileMaps() {
-    this.load.image("tiles", "assets/tilesets/tuxmon-sample-32px-extruded.png");
-    this.load.tilemapTiledJSON("map", "assets/tilemaps/tuxemon-town.json");
-    this.load.atlas([
-        ObjectAtlasMappings.playerAtlasMapping,
-        ObjectAtlasMappings.officeWorkerOneAtlasMapping
-    ])
+    this.load.image('tiles', 'assets/tilesets/tuxmon-sample-32px-extruded.png');
+    this.load.tilemapTiledJSON('map', 'assets/tilemaps/tuxemon-town.json');
+    this.load.atlas([ObjectAtlasMappings.playerAtlasMapping, ObjectAtlasMappings.officeWorkerOneAtlasMapping]);
   }
 
   private loadImages() {

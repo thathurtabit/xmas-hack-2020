@@ -1,9 +1,13 @@
 export class Constants {
   // Object ids
-    public static get officeWorkerOneId(): string {return "officeWorkerOneAtlas"}
-    public static get playerId(): string {return "playerAtlas"}
+  public static get officeWorkerOneId(): string {
+    return 'officeWorkerOneAtlas';
+  }
+  public static get playerId(): string {
+    return 'playerAtlas';
+  }
 
-    // Window
+  // Window
   public static get windowCenterY(): number {
     return window.innerHeight / 2;
   }
@@ -51,11 +55,27 @@ export class Constants {
     return 0.25;
   }
 
-    // OfficeWorker
-    public static get officeNPCWidth(): number {return 32;}
-    public static get officeNPCHeight(): number {return 32;}
-    public static get officeNPCOffsetX(): number {return 0;}
-    public static get officeNPCOffsetY(): number {return 32;}
-    public static get officeNPCSpeed(): number {return 120;}
-    public static get officeNPCDrawScale(): number {return 0.75;}
+  // OfficeWorker
+  public static get officeNPCWidth(): number {
+    return 32;
+  }
+  public static get officeNPCHeight(): number {
+    return 32;
+  }
+  public static get officeNPCOffsetX(): number {
+    return 0;
+  }
+  public static get officeNPCOffsetY(): number {
+    return 32;
+  }
+  public static get officeNPCSpeed(): number {
+    return 120;
+  }
+  public static get officeNPCDrawScale(): number {
+    return 0.75;
+  }
+  // HealthBar
+  public static get healthBarMax(): number {
+    return 100;
+  }
 }
