@@ -182,10 +182,15 @@ export default class Game extends Phaser.Scene {
       duration: duration
     });
 
-    this.physics.add.collider(officeWorker, floorLayer);
-    this.physics.add.overlap(this.player, officeWorker, this.takeDamage, null, this);
+    this.physics.world.enable(follower);
+    this.physics.add.overlap(this.player, follower, this.onOfficeWorkerCollision, null, this);
 
     return officeWorker;
+  }
+
+  private onOfficeWorkerCollision(player: Player, officeWorker): void {
+    officeWorker.pauseFollow();
+    this.decreaseHealth(10);
   }
 
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
@@ -216,8 +221,11 @@ export default class Game extends Phaser.Scene {
 
   private takeDamage(player: Player, item): void {
     item.disableBody(true, true);
+    this.decreaseHealth(20);
+  }
 
-    if (this.healthBar.decrease(20)) {
+  private decreaseHealth(amount) {
+    if (this.healthBar.decrease(amount)) {
       this.isPlayerDead = true;
       this.onGameOver();
     }
