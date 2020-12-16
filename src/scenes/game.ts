@@ -152,19 +152,21 @@ export default class Game extends Phaser.Scene {
       floorLayer, 
       Constants.officeWorkerOneId, 
       Paths.getPath1(this),
-      0
+      0,
+      10 * 1000
     ));
 
     this.officeWorkers.push(this.createOfficeWorker(
       floorLayer, 
       Constants.officeWorkerTwoId, 
       Paths.getPath1(this),
-      0.5
+      0.5,
+      8 * 1000
     ));
 
   }
 
-  private createOfficeWorker(floorLayer, id, path, startAt): OfficeWorker {
+  private createOfficeWorker(floorLayer, id, path, startAt, duration): OfficeWorker {
     this.createAnims(this.anims, id);
 
     const officeWorker = new OfficeWorker({
@@ -172,12 +174,12 @@ export default class Game extends Phaser.Scene {
         key: id,
     });
     officeWorker.init();
-    officeWorker.body.velocity.normalize().scale(Constants.officeNPCSpeed);
-
+    
     const follower = this.add.follower(path, 0, 0, id);
     follower.startFollow({
       repeat: -1,
-      startAt: startAt
+      startAt: startAt,
+      duration: duration
     });
 
     this.physics.add.collider(officeWorker, floorLayer);
