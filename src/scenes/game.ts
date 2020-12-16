@@ -155,13 +155,13 @@ export default class Game extends Phaser.Scene {
 
     // Add collisions to game objects
     this.physics.add.collider(this.player, floorLayer);
+    collidingLayers.forEach(layer => {
+      this.physics.add.collider(this.player, layer);
+    })
 
     // Trigger event on overlap
     this.physics.add.overlap(this.player, this.coffees, this.takeDamage, null, this);
     this.physics.add.collider(this.officeWorkers[0], floorLayer);
-    collidingLayers.forEach(layer => {
-      this.physics.add.collider(this.player, layer);
-    })
 
     // Debug graphics
     // Press 'D' during play to see debug mode
@@ -182,7 +182,7 @@ export default class Game extends Phaser.Scene {
   }
 
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
-    collidingLayers.forEach(layer => layer.setCollisionByProperty({collides:true}, true))
+    collidingLayers.forEach(layer => {layer.setCollisionByProperty({collides:true})})
   }
 
   update(): void {
