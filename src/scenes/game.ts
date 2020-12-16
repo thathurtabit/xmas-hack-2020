@@ -89,17 +89,6 @@ export default class Game extends Phaser.Scene {
 
     this.createOfficeWorkers(floorLayer);
 
-    // Manually adding in coffees, but this should be done through Tiled positioning
-    this.coffees = this.physics.add.group({
-      key: 'coffee',
-      repeat: 5,
-      setXY: {
-        x: Constants.windowCenterX - 200,
-        y: Constants.windowCenterY - 90,
-        stepX: 70,
-      },
-    });
-
     this.healthBar = new HealthBar(this, 20, 20);
 
     this.coffees.forEach(coffee => coffee.children.getArray().forEach((coffee: Phaser.GameObjects.Image, index: number) => {
@@ -307,12 +296,12 @@ export default class Game extends Phaser.Scene {
   }
 
   private spawnCoffee(map: Phaser.Tilemaps.Tilemap) {
-    let coffee1 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 1');
-    let coffee2 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 2');
-    let coffee3 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 3');
-    let coffee4 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 4');
-    let coffee5 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 5');
-    let coffee6 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 6');
+    const coffee1 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 1');
+    const coffee2 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 2');
+    const coffee3 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 3');
+    const coffee4 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 4');
+    const coffee5 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 5');
+    const coffee6 = map.findObject('Objects', (obj) => obj.name === 'coffee spawn 6');
 
     const coffeeSpawns = [coffee1, coffee2, coffee3, coffee4, coffee5, coffee6]
 
