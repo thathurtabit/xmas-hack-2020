@@ -17,8 +17,6 @@ export default class Game extends Phaser.Scene {
   officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   camera: Phaser.Cameras.Scene2D.Camera;
-  officeWorker1Path: Path;
-  follower: PathFollower;
 
   constructor() {
     super('game');
@@ -34,7 +32,6 @@ export default class Game extends Phaser.Scene {
 
   create(): void {
     this.createAnims(this.anims, Constants.playerId);
-    this.createAnims(this.anims, Constants.officeWorkerOneId);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.camera = this.cameras.main;
 
@@ -76,38 +73,7 @@ export default class Game extends Phaser.Scene {
     // Where the player will start ("Spawn Point" should be an object in Tiled)
     const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
 
-    this.officeWorker1Path = this.add.path(Constants.windowCenterX, Constants.windowCenterY + 120);
-    this.officeWorker1Path.lineTo(Constants.windowCenterX + 40, Constants.windowCenterY + 120);
-    this.officeWorker1Path.lineTo(Constants.windowCenterX, Constants.windowCenterY + 120);
-
-    this.officeWorkers.push(
-      new OfficeWorker({
-        scene: this,
-        x: Constants.windowCenterX,
-        y: Constants.windowCenterY + 120,
-        key: Constants.officeWorkerOneId,
-      }),
-    );
-    this.officeWorkers[0].init();
-
-    this.follower = this.add.follower(
-      this.officeWorker1Path,
-      Constants.windowCenterX,
-      Constants.windowCenterY + 120,
-      Constants.officeWorkerOneId,
-    );
-    this.follower.startFollow({
-      yoyo: true,
-      repeat: -1,
-    });
-
-    // TODO: Make this work - for looping NPC paths
-    this.tweens.add({
-      targets: this.follower,
-      t: 1,
-      duration: 10000,
-      repeat: -1,
-    });
+    this.createOfficeWorkers(floorLayer);
 
     this.player = new Player({
       scene: this,
@@ -147,7 +113,6 @@ export default class Game extends Phaser.Scene {
     });
 
     this.player.body.velocity.normalize().scale(Constants.playerSpeed);
-    this.officeWorkers[0].body.velocity.normalize().scale(Constants.officeNPCSpeed);
 
     this.camera.startFollow(this.player, true, 1, 1, this.player.displayWidth / 2, this.player.displayHeight / 2);
 
@@ -161,7 +126,6 @@ export default class Game extends Phaser.Scene {
 
     // Trigger event on overlap
     this.physics.add.overlap(this.player, this.coffees, this.takeDamage, null, this);
-    this.physics.add.collider(this.officeWorkers[0], floorLayer);
 
     // Debug graphics
     // Press 'D' during play to see debug mode
@@ -179,6 +143,45 @@ export default class Game extends Phaser.Scene {
         });
       })
     });
+  }
+
+  private createOfficeWorkers(floorLayer) {
+    let path1 = this.add.path(Constants.windowCenterX, Constants.windowCenterY + 120);
+    path1.lineTo(Constants.windowCenterX + 40, Constants.windowCenterY + 120);
+    path1.lineTo(Constants.windowCenterX, Constants.windowCenterY + 120);
+
+    this.officeWorkers.push(this.createOfficeWorker(floorLayer, Constants.officeWorkerOneId, path1));
+  }
+
+  private createOfficeWorker(floorLayer, id, path): OfficeWorker {
+    this.createAnims(this.anims, id);
+
+    let officeWorker = new OfficeWorker({
+        scene: this,
+        x: Constants.windowCenterX,
+        y: Constants.windowCenterY + 120,
+        key: Constants.officeWorkerOneId,
+    });
+
+    officeWorker.init();
+
+    let follower = this.add.follower(
+      path,
+      Constants.windowCenterX,
+      Constants.windowCenterY + 120,
+      Constants.officeWorkerOneId,
+    );
+
+    follower.startFollow({
+      yoyo: true,
+      repeat: -1,
+    });
+
+    officeWorker.body.velocity.normalize().scale(Constants.officeNPCSpeed);
+
+    this.physics.add.collider(officeWorker, floorLayer);
+
+    return officeWorker;
   }
 
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
