@@ -1,6 +1,6 @@
 export class Constants {
   // Object ids
-    public static get officeWorkerOneId(): string {return "officeWorkerOneIdAtlas"}
+    public static get officeWorkerOneId(): string {return "officeWorkerOneAtlas"}
     public static get playerId(): string {return "playerAtlas"}
 
     // Window

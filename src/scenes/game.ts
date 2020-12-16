@@ -25,7 +25,8 @@ export default class Game extends Phaser.Scene {
   }
 
   create(): void {
-    this.createAnims(this.anims);
+    this.createAnims(this.anims, Constants.playerId);
+    this.createAnims(this.anims, Constants.officeWorkerOneId);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.camera = this.cameras.main;
 
@@ -56,7 +57,10 @@ export default class Game extends Phaser.Scene {
     this.officeWorkers[0].init();
 
     this.follower = this.add.follower(this.officeWorker1Path, Constants.windowCenterX, Constants.windowCenterY + 120, Constants.officeWorkerOneId);
-    this.follower.startFollow(4000)
+    this.follower.startFollow({
+      yoyo: true,
+      repeat: -1
+    })
 
     // TODO: Make this work - for looping NPC paths
     this.tweens.add({
@@ -130,7 +134,7 @@ export default class Game extends Phaser.Scene {
   }
 
   update(): void {
-
+    this.officeWorkers[0].moveRight()
     // Move player / camera
     if (this.cursors.left.isDown) {
       this.player.moveLeft();
@@ -164,10 +168,10 @@ export default class Game extends Phaser.Scene {
     this.load.image('coffee', 'assets/images/coffee.png');
   }
 
-  private createAnims(anims) {
+  private createAnims(anims, objectId) {
     anims.create({
-      key: 'player-left-walk',
-      frames: anims.generateFrameNames('playerAtlas', {
+      key: objectId + '-left-walk',
+      frames: anims.generateFrameNames(objectId, {
         prefix: 'misa-left-walk.',
         start: 0,
         end: 3,
@@ -178,8 +182,8 @@ export default class Game extends Phaser.Scene {
     });
 
     anims.create({
-      key: 'player-right-walk',
-      frames: anims.generateFrameNames('playerAtlas', {
+      key: objectId + '-right-walk',
+      frames: anims.generateFrameNames(objectId, {
         prefix: 'misa-right-walk.',
         start: 0,
         end: 3,
@@ -190,8 +194,8 @@ export default class Game extends Phaser.Scene {
     });
 
     anims.create({
-      key: 'player-front-walk',
-      frames: anims.generateFrameNames('playerAtlas', {
+      key: objectId + '-front-walk',
+      frames: anims.generateFrameNames(objectId, {
         prefix: 'misa-front-walk.',
         start: 0,
         end: 3,
@@ -202,8 +206,8 @@ export default class Game extends Phaser.Scene {
     });
 
     anims.create({
-      key: 'player-back-walk',
-      frames: anims.generateFrameNames('playerAtlas', {
+      key: objectId + '-back-walk',
+      frames: anims.generateFrameNames(objectId, {
         prefix: 'misa-back-walk.',
         start: 0,
         end: 3,

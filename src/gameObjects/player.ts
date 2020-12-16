@@ -4,10 +4,12 @@ import 'phaser';
 export class Player extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body;
   playerSpeed: number;
+  key: string;
 
   constructor(params) {
     super(params.scene, params.x, params.y, params.key, params.frame);
     this.playerSpeed = Constants.playerSpeed;
+    this.key = params.key;
   }
 
   init(): void {
@@ -37,22 +39,22 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   moveUp(): void {
-    this.anims.play('player-front-walk', true);
+    this.anims.play(this.key+'-back-walk', true);
     this.body.setVelocityY(-this.playerSpeed);
   }
 
   moveDown(): void {
-    this.anims.play('player-back-walk', true);
+    this.anims.play(this.key+'-front-walk', true);
     this.body.setVelocityY(this.playerSpeed);
   }
 
   moveLeft(): void {
-    this.anims.play('player-left-walk', true);
+    this.anims.play(this.key+'-left-walk', true);
     this.body.setVelocityX(-this.playerSpeed);
   }
 
   moveRight(): void {
-    this.anims.play('player-right-walk', true);
+    this.anims.play(this.key+'-right-walk', true);
     this.body.setVelocityX(this.playerSpeed);
   }
 

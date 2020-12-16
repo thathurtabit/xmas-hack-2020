@@ -30,4 +30,6 @@ export default class Splash extends Phaser.Scene {
             repeat: -1,
         });
     }
+
+
 }
