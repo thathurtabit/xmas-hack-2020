@@ -151,17 +151,26 @@ export default class Game extends Phaser.Scene {
     this.officeWorkers.push(this.createOfficeWorker(
       floorLayer, 
       Constants.officeWorkerOneId, 
-      Paths.getPath1(this)
-      ));
+      Paths.getPath1(this),
+      0
+    ));
+
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      Constants.officeWorkerOneId, 
+      Paths.getPath1(this),
+      0.5
+    ));
+
   }
 
-  private createOfficeWorker(floorLayer, id, path): OfficeWorker {
+  private createOfficeWorker(floorLayer, id, path, startAt): OfficeWorker {
     this.createAnims(this.anims, id);
 
     let officeWorker = new OfficeWorker({
         scene: this,
-        x: Constants.windowCenterX,
-        y: Constants.windowCenterY + 120,
+        // x: Constants.windowCenterX,
+        // y: Constants.windowCenterY + 120,
         key: id,
     });
 
@@ -169,14 +178,14 @@ export default class Game extends Phaser.Scene {
 
     let follower = this.add.follower(
       path,
-      Constants.windowCenterX,
-      Constants.windowCenterY + 120,
+      0,
+      0,
       id,
     );
 
     follower.startFollow({
-      yoyo: true,
       repeat: -1,
+      startAt: startAt
     });
 
     officeWorker.body.velocity.normalize().scale(Constants.officeNPCSpeed);
