@@ -10,7 +10,7 @@ export class HealthBar extends Phaser.GameObjects.GameObject {
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, 'graphic');
-    this.healthBar = new Phaser.GameObjects.Graphics(scene).setScrollFactor(0);
+    this.healthBar = new Phaser.GameObjects.Graphics(scene).setScrollFactor(0).setDepth(20);
 
     this.healthBarX = x;
     this.healthBarY = y;
