@@ -74,7 +74,6 @@ export default class Game extends Phaser.Scene {
     // Where the player will start ("Spawn Point" should be an object in Tiled)
     const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
 
-    this.createOfficeWorkers(floorLayer);
     this.spawnCoffee(map);
 
     this.player = new Player({
