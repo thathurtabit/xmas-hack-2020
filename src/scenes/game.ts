@@ -14,6 +14,7 @@ export default class Game extends Phaser.Scene {
   isPlayerDead: boolean;
   player: Player;
   coffees = [];
+  handGels = [];
   healthBar: HealthBar;
   officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -75,6 +76,7 @@ export default class Game extends Phaser.Scene {
     const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
 
     this.spawnCoffee(map);
+    this.spawnHandGel(map);
 
     this.player = new Player({
       scene: this,
@@ -89,20 +91,8 @@ export default class Game extends Phaser.Scene {
     this.createOfficeWorkers(floorLayer);
 
     this.healthBar = new HealthBar(this, 20, 20);
-
-    this.coffees.forEach(coffee => coffee.children.getArray().forEach((coffee: Phaser.GameObjects.Image, index: number) => {
-      coffee.scale = 0.2;
-
-      this.tweens.add({
-        targets: coffee,
-        y: coffee.y - 10,
-        duration: 1000,
-        ease: 'Sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        delay: index * 100,
-      });
-    }));
+    this.addCoffee();
+    this.addHandGel();
 
     this.player.body.velocity.normalize().scale(Constants.playerSpeed);
 
@@ -118,6 +108,7 @@ export default class Game extends Phaser.Scene {
 
     // Trigger event on overlap
     this.physics.add.overlap(this.player, this.coffees, this.drinkCoffee, null, this);
+    this.physics.add.overlap(this.player, this.handGels, this.sanitise, null, this);
 
     // Debug graphics
     // Press 'D' during play to see debug mode
@@ -135,6 +126,39 @@ export default class Game extends Phaser.Scene {
         });
       })
     });
+  }
+
+  private addCoffee() {
+    this.coffees.forEach(coffee => coffee.children.getArray().forEach((coffee: Phaser.GameObjects.Image, index: number) => {
+      coffee.scale = 0.2;
+
+      this.tweens.add({
+        targets: coffee,
+        y: coffee.y - 10,
+        duration: 1000,
+        ease: 'Sine.inOut',
+        yoyo: true,
+        repeat: -1,
+        delay: index * 100,
+      });
+    }));
+  }
+
+
+  private addHandGel() {
+    this.handGels.forEach(handGel => handGel.children.getArray().forEach((handGel: Phaser.GameObjects.Image, index: number) => {
+      handGel.scale = 2;
+
+      this.tweens.add({
+        targets: handGel,
+        y: handGel.y - 10,
+        duration: 1000,
+        ease: 'Sine.inOut',
+        yoyo: true,
+        repeat: -1,
+        delay: index * 100,
+      });
+    }));
   }
 
   private createOfficeWorkers(floorLayer) {
@@ -223,6 +247,11 @@ export default class Game extends Phaser.Scene {
     this.decreaseHealth(20);
   }
 
+  private sanitise(player: Player, item): void {
+    item.disableBody(true, true);
+    this.decreaseHealth(-20);
+  }
+
   private decreaseHealth(amount) {
     if (this.healthBar.decrease(amount)) {
       this.isPlayerDead = true;
@@ -250,6 +279,7 @@ export default class Game extends Phaser.Scene {
 
   private loadImages() {
     this.load.image('coffee', 'assets/images/coffee.png');
+    this.load.image('hand gel', 'assets/images/soap.png');
   }
 
   private createAnims(anims, objectId) {
@@ -321,6 +351,28 @@ export default class Game extends Phaser.Scene {
           x: coffee.x,
           // @ts-ignore
           y: coffee.y
+        },
+      }))
+    })
+  }
+
+  private spawnHandGel(map: Phaser.Tilemaps.Tilemap) {
+    const handGel1 = map.findObject('Objects', (obj) => obj.name === 'hand gel 1');
+    const handGel2 = map.findObject('Objects', (obj) => obj.name === 'hand gel 2');
+    const handGel3 = map.findObject('Objects', (obj) => obj.name === 'hand gel 3');
+    const handGel4 = map.findObject('Objects', (obj) => obj.name === 'hand gel 4');
+
+    const handGelSpawns = [handGel1, handGel2, handGel3, handGel4]
+
+    handGelSpawns.forEach(handGel => {
+      this.handGels.push(this.physics.add.group({
+        key: 'hand gel',
+        repeat: 0,
+        setXY: {
+          // @ts-ignore
+          x: handGel.x,
+          // @ts-ignore
+          y: handGel.y
         },
       }))
     })

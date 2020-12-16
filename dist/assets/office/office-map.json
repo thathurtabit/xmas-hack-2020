@@ -133,6 +133,54 @@
                  "width":0,
                  "x":981.922355033093,
                  "y":441.568704929369
+                }, 
+                {
+                 "height":0,
+                 "id":13,
+                 "name":"hand gel 4",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":926.602785735454,
+                 "y":190.654944186506
+                }, 
+                {
+                 "height":0,
+                 "id":14,
+                 "name":"hand gel 3",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1023.41203200632,
+                 "y":493.924725871777
+                }, 
+                {
+                 "height":0,
+                 "id":15,
+                 "name":"hand gel 2",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1295.0706312358,
+                 "y":1074.78020349699
+                }, 
+                {
+                 "height":0,
+                 "id":16,
+                 "name":"hand gel 1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":432.678059863677,
+                 "y":150.15311666502
                 }],
          "opacity":1,
          "properties":[
@@ -435,7 +483,7 @@
          "y":0
         }],
  "nextlayerid":23,
- "nextobjectid":12,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.3",
