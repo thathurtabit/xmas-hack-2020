@@ -157,7 +157,7 @@ export default class Game extends Phaser.Scene {
 
     this.officeWorkers.push(this.createOfficeWorker(
       floorLayer, 
-      Constants.officeWorkerOneId, 
+      Constants.officeWorkerTwoId, 
       Paths.getPath1(this),
       0.5
     ));
@@ -235,7 +235,7 @@ export default class Game extends Phaser.Scene {
     this.load.image('objects', 'assets/office/map-files/images/top-down interior v2.png');
 
     this.load.tilemapTiledJSON('map', 'assets/office/office-map.json');
-    this.load.atlas([ObjectAtlasMappings.playerAtlasMapping, ObjectAtlasMappings.officeWorkerOneAtlasMapping])
+    this.load.atlas(ObjectAtlasMappings.getMappings)
   }
 
   private loadImages() {

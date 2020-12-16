@@ -3,6 +3,10 @@ export class Constants {
   public static get officeWorkerOneId(): string {
     return 'officeWorkerOneAtlas';
   }
+  public static get officeWorkerTwoId(): string {
+    return 'officeWorkerTwoAtlas';
+  }
+  
   public static get playerId(): string {
     return 'playerAtlas';
   }
