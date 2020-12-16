@@ -169,26 +169,16 @@ export default class Game extends Phaser.Scene {
 
     const officeWorker = new OfficeWorker({
         scene: this,
-        // x: Constants.windowCenterX,
-        // y: Constants.windowCenterY + 120,
         key: id,
     });
-
     officeWorker.init();
+    officeWorker.body.velocity.normalize().scale(Constants.officeNPCSpeed);
 
-    const follower = this.add.follower(
-      path,
-      0,
-      0,
-      id,
-    );
-
+    const follower = this.add.follower(path, 0, 0, id);
     follower.startFollow({
       repeat: -1,
       startAt: startAt
     });
-
-    officeWorker.body.velocity.normalize().scale(Constants.officeNPCSpeed);
 
     this.physics.add.collider(officeWorker, floorLayer);
 
