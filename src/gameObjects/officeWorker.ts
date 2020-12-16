@@ -20,10 +20,20 @@ export class OfficeWorker extends Phaser.GameObjects.Sprite {
 
     this.setScale(Constants.officeNPCDrawScale, Constants.officeNPCDrawScale);
 
-    this.anims.play(this.key + '-right-walk', true);
+    this.scene.add.existing(this);
+
+    this.body.setVelocity(100, 200);
+    this.body.setBounce(1, 1);
+    this.body.setCollideWorldBounds(true);
+    // .setGravityY(200);
+
+    // this.anims.play(this.key+'-back-walk', true);
+    // this.body.setVelocityX(Constants.officeNPCSpeed);
+
+    // this.anims.play(this.key + '-right-walk', true);
   }
 
   moveRight(): void {
-    this.anims.play(this.key + '-right-walk', true);
+    // this.anims.play(this.key + '-right-walk', true);
   }
 }

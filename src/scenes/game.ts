@@ -86,7 +86,7 @@ export default class Game extends Phaser.Scene {
     });
     this.player.init();
 
-    this.createOfficeWorkers(floorLayer);
+    this.createOfficeWorkers(floorLayer, collidingLayers);
 
     this.healthBar = new HealthBar(this, 20, 20);
 
@@ -137,55 +137,75 @@ export default class Game extends Phaser.Scene {
     });
   }
 
-  private createOfficeWorkers(floorLayer) {
+  private createOfficeWorkers(floorLayer, collidingLayers) {
 
     this.officeWorkers.push(this.createOfficeWorker(
       floorLayer, 
+      collidingLayers,
       Constants.officeWorkerOneId, 
       Paths.getPath1(this),
       0,
-      10 * 1000
+      10 * 1000,
+      100,
+      100
     ));
 
     this.officeWorkers.push(this.createOfficeWorker(
       floorLayer, 
+      collidingLayers,
       Constants.officeWorkerTwoId, 
       Paths.getPath1(this),
       0.5,
-      8 * 1000
+      8 * 1000,
+      500,
+      500
     ));
 
   }
 
-  private createOfficeWorker(floorLayer, id, path, startAt, duration): OfficeWorker {
+  private createOfficeWorker(floorLayer, collidingLayers, id, path, startAt, duration, x, y): OfficeWorker {
     this.createAnims(this.anims, id);
 
     const officeWorker = new OfficeWorker({
         scene: this,
         key: id,
+        x: x,
+        y: y
     });
     officeWorker.init();
+    
+    officeWorker.body.velocity.normalize().scale(Constants.playerSpeed);
 
-    const follower = this.add.follower(path, 0, 0, id);
-    follower.startFollow({
-      repeat: -1,
-      startAt: startAt,
-      duration: duration
-    });
+    // Add collisions to game objects
+    this.physics.add.collider(officeWorker, floorLayer);
+    collidingLayers.forEach(layer => {
+      this.physics.add.collider(officeWorker, layer);
+    })
 
-    this.physics.world.enable(follower);
-    this.physics.add.overlap(this.player, follower, this.onOfficeWorkerCollision, null, this);
+    this.physics.add.overlap(this.player, officeWorker, this.onOfficeWorkerCollision, null, this);
+
+
+    // const follower = this.add.follower(path, 0, 0, id);
+    // follower.startFollow({
+    //   repeat: -1,
+    //   startAt: startAt,
+    //   duration: duration
+    // });
+
+    // this.physics.world.enable(follower);
+    // this.physics.add.overlap(this.player, follower, this.onOfficeWorkerCollision, null, this);
 
     return officeWorker;
   }
 
   private onOfficeWorkerCollision(player: Player, officeWorker): void {
-    if (officeWorker.isFollowing()) {
-      officeWorker.pauseFollow();
-      this.decreaseHealth(10);
+    console.log("COLLISION!")
+    // if (officeWorker.isFollowing()) {
+    //   officeWorker.pauseFollow();
+    //   this.decreaseHealth(10);
 
-      this.time.delayedCall(3000, this.resumePausedOfficeWorker, [ officeWorker ], this);
-    }
+    //   this.time.delayedCall(3000, this.resumePausedOfficeWorker, [ officeWorker ], this);
+    // }
   }
 
   private resumePausedOfficeWorker(officeWorker) {
