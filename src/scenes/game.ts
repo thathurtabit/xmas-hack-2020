@@ -1,12 +1,19 @@
 import 'phaser';
 import { Player } from '../gameObjects/player';
 import { Constants } from '../utils/constants';
+import {OfficeWorker} from "../gameObjects/officeWorker";
+import Path = Phaser.Curves.Path;
+import {ObjectAtlasMappings} from "../gameObjects/objectAtlasMappings";
+import PathFollower = Phaser.GameObjects.Components.PathFollower;
 
 export default class Game extends Phaser.Scene {
   player: Player;
   coffees: Phaser.GameObjects.Group;
+  officeWorkers: OfficeWorker[] = []
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   camera: Phaser.Cameras.Scene2D.Camera;
+  officeWorker1Path: Path
+  follower: PathFollower
 
   constructor() {
     super('game');
@@ -37,11 +44,33 @@ export default class Game extends Phaser.Scene {
     // Where the player will start ("Spawn Point" should be an object in Tiled)
     const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
 
+    this.officeWorker1Path = this.add.path(Constants.windowCenterX, Constants.windowCenterY + 120)
+    this.officeWorker1Path.lineTo(Constants.windowCenterX + 40, Constants.windowCenterY + 120)
+    this.officeWorker1Path.lineTo(Constants.windowCenterX, Constants.windowCenterY + 120)
+
+    this.officeWorkers.push(new OfficeWorker({
+      scene: this,
+      x: Constants.windowCenterX,
+      y: Constants.windowCenterY + 120,
+      key: Constants.officeWorkerOneId}))
+    this.officeWorkers[0].init();
+
+    this.follower = this.add.follower(this.officeWorker1Path, Constants.windowCenterX, Constants.windowCenterY + 120, Constants.officeWorkerOneId);
+    this.follower.startFollow(4000)
+
+    // TODO: Make this work - for looping NPC paths
+    this.tweens.add({
+      targets: this.follower,
+      t: 1,
+      duration: 10000,
+      repeat: -1
+    })
+
     this.player = new Player({
       scene: this,
       x: Constants.windowCenterX,
       y: Constants.windowCenterY + 130,
-      key: 'playerAtlas',
+      key: Constants.playerId,
     });
     this.player.init();
 
@@ -71,6 +100,7 @@ export default class Game extends Phaser.Scene {
     });
 
     this.player.body.velocity.normalize().scale(Constants.playerSpeed);
+    this.officeWorkers[0].body.velocity.normalize().scale(Constants.officeNPCSpeed);
 
     this.camera.startFollow(this.player, true, 1, 1, this.player.displayWidth / 2, this.player.displayHeight / 2);
 
@@ -78,6 +108,7 @@ export default class Game extends Phaser.Scene {
 
     this.physics.add.collider(this.player, worldLayer);
     this.physics.add.collider(this.player, worldLayer);
+    this.physics.add.collider(this.officeWorkers[0], worldLayer)
 
     // Debug graphics
     // Press 'D' during play to see debug mode
@@ -96,6 +127,7 @@ export default class Game extends Phaser.Scene {
   }
 
   update(): void {
+
     // Move player / camera
     if (this.cursors.left.isDown) {
       this.player.moveLeft();
@@ -112,9 +144,12 @@ export default class Game extends Phaser.Scene {
   }
 
   private loadTileMaps() {
-    this.load.image('tiles', 'assets/tilesets/tuxmon-sample-32px-extruded.png');
-    this.load.tilemapTiledJSON('map', 'assets/tilemaps/tuxemon-town.json');
-    this.load.atlas('playerAtlas', 'assets/atlas/atlas.png', 'assets/atlas/atlas.json');
+    this.load.image("tiles", "assets/tilesets/tuxmon-sample-32px-extruded.png");
+    this.load.tilemapTiledJSON("map", "assets/tilemaps/tuxemon-town.json");
+    this.load.atlas([
+        ObjectAtlasMappings.playerAtlasMapping,
+        ObjectAtlasMappings.officeWorkerOneAtlasMapping
+    ])
   }
 
   private loadImages() {
