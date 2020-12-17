@@ -707,6 +707,30 @@
                  "width":0,
                  "x":-138.708279150412,
                  "y":557.722872417281
+                }, 
+                {
+                 "height":0,
+                 "id":69,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":-130.039011703511,
+                 "y":-215.286808264702
+                }, 
+                {
+                 "height":0,
+                 "id":70,
+                 "name":"worker-spawn-24",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1103.88672157203,
+                 "y":333.766796705678
                 }],
          "opacity":1,
          "properties":[
@@ -1009,7 +1033,7 @@
          "y":0
         }],
  "nextlayerid":23,
- "nextobjectid":69,
+ "nextobjectid":71,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.3",

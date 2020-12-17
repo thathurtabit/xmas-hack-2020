@@ -136,7 +136,7 @@ export default class Game extends Phaser.Scene {
     workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-10'));
     workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-11'));
     workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-12'));
-    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-13'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-12'));
     workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-14'));
     workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-15'));
     workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-16'));
