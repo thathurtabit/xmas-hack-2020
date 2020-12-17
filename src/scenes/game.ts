@@ -334,7 +334,19 @@ export default class Game extends Phaser.Scene {
       this.playOfficeWorkerCollisionSfx();
       officeWorker.pause(3000);
       this.decreaseHealth(20);
+      this.animatePlayerDamage();
     }
+  }
+
+  private animatePlayerDamage(): void {
+    this.tweens.add({
+      targets: this.player,
+      alpha: { from: 0.1, to: 1 },
+      ease: 'Linear',
+      duration: 500,
+      repeat: 3,
+      yoyo: false,
+    });
   }
 
   private playOfficeWorkerCollisionSfx(): void {
