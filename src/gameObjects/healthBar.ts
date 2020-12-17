@@ -1,7 +1,5 @@
 import 'phaser';
-import { GameObjects } from 'phaser';
 import { Constants } from '../utils/constants';
-import { OfficeWorker } from './officeWorker';
 
 export class HealthBar extends Phaser.GameObjects.GameObject {
   healthBar: Phaser.GameObjects.Graphics;
@@ -31,18 +29,18 @@ export class HealthBar extends Phaser.GameObjects.GameObject {
       this.healthBarValue = 0;
     }
 
-    this.drawHealthBar()
+    this.drawHealthBar();
     return this.healthBarValue === 0;
   }
 
   public increase(amount: number): boolean {
-    this.healthBarValue += amount;
-
-    if (this.healthBarValue > Constants.healthBarMax) {
+    if (this.healthBarValue < Constants.healthBarMax) {
+      this.healthBarValue += amount;
+      this.drawHealthBar();
+    }
+    if (this.healthBarValue >= Constants.healthBarMax) {
       this.healthBarValue = Constants.healthBarMax;
     }
-
-    this.drawHealthBar();
 
     return this.healthBarValue === Constants.healthBarMax;
   }
