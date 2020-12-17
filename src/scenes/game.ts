@@ -333,7 +333,7 @@ export default class Game extends Phaser.Scene {
     if (!officeWorker.isPaused()) {
       this.playOfficeWorkerCollisionSfx();
       officeWorker.pause(3000);
-      this.decreaseHealth(20);
+      this.decreaseHealth(Constants.playerCollisionWithCoWorkerDamage);
       this.animatePlayerDamage();
     }
   }

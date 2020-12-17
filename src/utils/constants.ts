@@ -65,6 +65,9 @@ export class Constants {
   public static get playerDrawScale(): number {
     return 0.75;
   }
+  public static get playerCollisionWithCoWorkerDamage(): number {
+    return 25;
+  }
 
   // Coffee
   public static get coffeeWidth(): number {
