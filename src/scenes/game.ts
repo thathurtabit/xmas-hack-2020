@@ -359,7 +359,7 @@ export default class Game extends Phaser.Scene {
   }
 
   private stopGameMusic() {
-    const mainMusic = this.sound.get("level-1")
+    const mainMusic = this.sound.get("level 1 music")
     mainMusic.stop();
   }
 
