@@ -33,9 +33,16 @@ export default class Game extends Phaser.Scene {
   preload(): void {
     this.loadTileMaps();
     this.loadImages();
+    this.loadAudio();
   }
 
   create(): void {
+    const levelMusic = this.sound.add("level 1 music", {
+      loop: true
+    })
+
+    levelMusic.play();
+
     this.createAnims(this.anims, Constants.playerId);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.camera = this.cameras.main;
@@ -361,6 +368,10 @@ export default class Game extends Phaser.Scene {
     this.load.image('coffee', 'assets/images/coffee.png');
     this.load.image('hand gel', 'assets/images/soap.png');
     this.load.image('face mask', 'assets/images/mask.png');
+  }
+
+  private loadAudio()  {
+    this.load.audio('level 1 music', 'assets/atlas/audio/music/level-1.wav');
   }
 
   private createAnims(anims, objectId) {
