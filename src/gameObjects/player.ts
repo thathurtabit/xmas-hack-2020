@@ -24,8 +24,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.displayOriginY = 0.5;
 
     this.setScale(Constants.playerDrawScale, Constants.playerDrawScale);
-    //this.body.collideWorldBounds = true; // - This causes physics problem
-
+    this.body.setCollideWorldBounds(true);
     this.scene.add.existing(this);
   }
 
