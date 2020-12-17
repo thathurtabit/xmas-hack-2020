@@ -191,9 +191,6 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker1Id,
-        Paths.getPath1(this),
-        0,
-        10 * 1000,
         spawns[0].x,
         spawns[0].y,
       ),
@@ -204,9 +201,6 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker2Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
         spawns[1].x,
         spawns[1].y,
       ),
@@ -217,9 +211,6 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker3Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
         spawns[2].x,
         spawns[2].y,
       ),
@@ -230,9 +221,6 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker4Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
         spawns[3].x + 20,
         spawns[3].y + 30,
       ),
@@ -243,9 +231,6 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker5Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
         spawns[4].x,
         spawns[4].y,
       ),
@@ -256,9 +241,6 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker6Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
         spawns[5].x,
         spawns[5].y,
       ),
@@ -269,9 +251,6 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker7Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
         spawns[6].x,
         spawns[6].y,
       ),
@@ -282,9 +261,6 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker8Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
         spawns[7].x,
         spawns[7].y,
       ),
@@ -295,9 +271,6 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker9Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
         spawns[8].x,
         spawns[8].y,
       ),
@@ -308,16 +281,13 @@ export default class Game extends Phaser.Scene {
         floorLayer,
         collidingLayers,
         Constants.officeWorker10Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
         spawns[9].x,
         spawns[9].y,
       ),
     );
   }
 
-  private createOfficeWorker(floorLayer, collidingLayers, id, path, startAt, duration, x, y): OfficeWorker {
+  private createOfficeWorker(floorLayer, collidingLayers, id, x, y): OfficeWorker {
     this.createAnims(this.anims, id);
 
     const officeWorker = new OfficeWorker({
@@ -337,16 +307,6 @@ export default class Game extends Phaser.Scene {
     });
 
     this.physics.add.overlap(this.player, officeWorker, this.onOfficeWorkerCollision, null, this);
-
-    // const follower = this.add.follower(path, 0, 0, id);
-    // follower.startFollow({
-    //   repeat: -1,
-    //   startAt: startAt,
-    //   duration: duration
-    // });
-
-    // this.physics.world.enable(follower);
-    // this.physics.add.overlap(this.player, follower, this.onOfficeWorkerCollision, null, this);
 
     return officeWorker;
   }
