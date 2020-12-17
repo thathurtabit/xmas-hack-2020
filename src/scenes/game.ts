@@ -329,7 +329,7 @@ export default class Game extends Phaser.Scene {
     return officeWorker;
   }
 
-  private onOfficeWorkerCollision(player: Player, officeWorker): void {
+  private onOfficeWorkerCollision(player: Player, officeWorker: OfficeWorker): void {
     if (!officeWorker.isPaused()) {
       this.playOfficeWorkerCollisionSfx();
       officeWorker.pause(3000);
@@ -393,13 +393,13 @@ export default class Game extends Phaser.Scene {
     player.speedUp();
   }
 
-  private sanitise(player: Player, item): void {
+  private sanitise(player: Player, item: Phaser.GameObjects.GameObject): void {
     item.destroy(true);
     this.playHandGelSfx();
     this.healthBar.increase(10);
   }
 
-  public decreaseHealth(amount) {
+  public decreaseHealth(amount: number): void {
     if (this.healthBar.decrease(amount)) {
       this.isPlayerDead = true;
       this.onGameOver();
@@ -410,7 +410,7 @@ export default class Game extends Phaser.Scene {
     this.music.stop();
   }
 
-  private findItem(player: Player, item): void {
+  private findItem(player: Player, item: Phaser.GameObjects.GameObject): void {
     this.playItemFoundSfx();
     item.destroy(true);
     this.itemCounter.increment(1);
