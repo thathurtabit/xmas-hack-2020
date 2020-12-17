@@ -31,13 +31,7 @@ export class HealthBar extends Phaser.GameObjects.GameObject {
       this.healthBarValue = 0;
     }
 
-    this.drawHealthBar();
-
-    const config: Phaser.Time.TimerEvent = new Phaser.Time.TimerEvent({
-      delay: 
-    } as Phaser.Types.Time.TimerEventConfig)
-    this.scene.time.addEvent(config)
-
+    this.drawHealthBar()
     return this.healthBarValue === 0;
   }
 
