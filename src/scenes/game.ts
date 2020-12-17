@@ -11,6 +11,7 @@ import { HealthBar } from '../gameObjects/healthBar';
 import { Coffee } from '../gameObjects/coffee';
 import { HandGel } from '../gameObjects/handGel';
 import { FaceMask } from '../gameObjects/faceMask';
+import { OfficeWorkers } from '../gameObjects/officeWorkers';
 
 export default class Game extends Phaser.Scene {
   isGameComplete = false;
@@ -23,6 +24,7 @@ export default class Game extends Phaser.Scene {
   officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   camera: Phaser.Cameras.Scene2D.Camera;
+  officeWorkersTest: OfficeWorkers
 
   constructor() {
     super('game');
@@ -114,19 +116,9 @@ export default class Game extends Phaser.Scene {
     const workerSpawn9 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-9');
     const workerSpawn10 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-10');
 
-    const workerSpawns = [
-      workerSpawn1,
-      workerSpawn2,
-      workerSpawn3,
-      workerSpawn4,
-      workerSpawn5,
-      workerSpawn6,
-      workerSpawn7,
-      workerSpawn8,
-      workerSpawn9,
-      workerSpawn10,
-    ];
-
+    const workerSpawns = [workerSpawn1, workerSpawn2, workerSpawn3, workerSpawn4, workerSpawn5, 
+                          workerSpawn6, workerSpawn7, workerSpawn8, workerSpawn9, workerSpawn10];
+                          
     this.player = new Player({
       scene: this,
       // @ts-ignore
@@ -137,12 +129,14 @@ export default class Game extends Phaser.Scene {
     });
     this.player.init();
 
-    this.createOfficeWorkers(floorLayer, collidingLayers, workerSpawns);
-
+    this.createOfficeWorkers(this, floorLayer, collidingLayers, workerSpawns);
+    // this.officeWorkersTest = new OfficeWorkers(this, floorLayer, collidingLayers, workerSpawns)
+    
     this.healthBar = new HealthBar(this, 20, 20);
     // this.addCoffee();
     // this.addHandGel();
     // this.addFaceMask();
+    // this.officeWorkersTest.createOfficeWorkers()
 
     this.spawnCoffees(map);
     this.spawnHandGels(map);
@@ -183,141 +177,91 @@ export default class Game extends Phaser.Scene {
     });
   }
 
-  private createOfficeWorkers(floorLayer, collidingLayers, spawns) {
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker1Id,
-        Paths.getPath1(this),
-        0,
-        10 * 1000,
-        spawns[0].x,
-        spawns[0].y,
-      ),
-    );
+  private createOfficeWorkers(context, floorLayer, collidingLayers, spawns) {
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker2Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
-        spawns[1].x,
-        spawns[1].y,
-      ),
-    );
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker1Id, 
+      spawns[0].x,
+      spawns[0].y
+    ));
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker3Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
-        spawns[2].x,
-        spawns[2].y,
-      ),
-    );
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker2Id, 
+      spawns[1].x,
+      spawns[1].y
+    ));
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker4Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
-        spawns[3].x + 20,
-        spawns[3].y + 30,
-      ),
-    );
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker3Id, 
+      spawns[2].x,
+      spawns[2].y
+    ));
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker5Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
-        spawns[4].x,
-        spawns[4].y,
-      ),
-    );
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker4Id, 
+      spawns[3].x + 20,
+      spawns[3].y + 30
+    ));
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker6Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
-        spawns[5].x,
-        spawns[5].y,
-      ),
-    );
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker5Id, 
+      spawns[4].x,
+      spawns[4].y
+    ));
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker7Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
-        spawns[6].x,
-        spawns[6].y,
-      ),
-    );
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker6Id, 
+      spawns[5].x,
+      spawns[5].y
+    ));
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker8Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
-        spawns[7].x,
-        spawns[7].y,
-      ),
-    );
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker7Id,
+      spawns[6].x,
+      spawns[6].y
+    ));
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker9Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
-        spawns[8].x,
-        spawns[8].y,
-      ),
-    );
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker8Id, 
+      spawns[7].x,
+      spawns[7].y
+    ));
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker10Id,
-        Paths.getPath1(this),
-        0.5,
-        8 * 1000,
-        spawns[9].x,
-        spawns[9].y,
-      ),
-    );
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker9Id, 
+      spawns[8].x,
+      spawns[8].y
+    ));
+
+    this.officeWorkers.push(this.createOfficeWorker(
+      floorLayer, 
+      collidingLayers,
+      Constants.officeWorker10Id, 
+      spawns[9].x,
+      spawns[9].y
+    ));
+
   }
 
-  private createOfficeWorker(floorLayer, collidingLayers, id, path, startAt, duration, x, y): OfficeWorker {
-    this.createAnims(this.anims, id);
-
+  private createOfficeWorker(floorLayer, collidingLayers, id, x, y): OfficeWorker {
     const officeWorker = new OfficeWorker({
       scene: this,
       key: id,
@@ -325,40 +269,25 @@ export default class Game extends Phaser.Scene {
       y: y,
     });
     officeWorker.init();
+    this.addOfficerWorkerPhysicsAndCollisions(officeWorker, floorLayer, collidingLayers);
+    return officeWorker;
+  }
 
-    officeWorker.body.velocity.normalize().scale(Constants.playerSpeed);
 
-    // Add collisions to game objects
+  private addOfficerWorkerPhysicsAndCollisions(officeWorker: OfficeWorker, floorLayer: any, collidingLayers: any) {
     this.physics.add.collider(officeWorker, floorLayer);
     collidingLayers.forEach((layer) => {
       this.physics.add.collider(officeWorker, layer);
     });
 
     this.physics.add.overlap(this.player, officeWorker, this.onOfficeWorkerCollision, null, this);
-
-    // const follower = this.add.follower(path, 0, 0, id);
-    // follower.startFollow({
-    //   repeat: -1,
-    //   startAt: startAt,
-    //   duration: duration
-    // });
-
-    // this.physics.world.enable(follower);
-    // this.physics.add.overlap(this.player, follower, this.onOfficeWorkerCollision, null, this);
-
-    return officeWorker;
   }
 
-  private onOfficeWorkerCollision(player: Player, officeWorker): void {
+  private onOfficeWorkerCollision(player: Player, officeWorker: OfficeWorker): void {
     console.log('COLLISION!');
+
+    officeWorker.stop()
     this.decreaseHealth(20);
-
-    // if (officeWorker.isFollowing()) {
-    //   officeWorker.pauseFollow();
-    //   this.decreaseHealth(10);
-
-    //   this.time.delayedCall(3000, this.resumePausedOfficeWorker, [ officeWorker ], this);
-    // }
   }
 
   private resumePausedOfficeWorker(officeWorker) {
@@ -372,7 +301,6 @@ export default class Game extends Phaser.Scene {
   }
 
   update(): void {
-    this.officeWorkers[0].moveRight();
     // Move player / camera
     if (this.cursors.left.isDown) {
       this.player.moveLeft();
@@ -404,7 +332,7 @@ export default class Game extends Phaser.Scene {
     this.decreaseHealth(-20);
   }
 
-  private decreaseHealth(amount) {
+  public decreaseHealth(amount) {
     if (this.healthBar.decrease(amount)) {
       this.isPlayerDead = true;
       this.onGameOver();

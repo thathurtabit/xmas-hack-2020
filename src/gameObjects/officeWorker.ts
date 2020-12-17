@@ -1,5 +1,7 @@
 import { Constants } from './../utils/constants';
 import 'phaser';
+import { Player } from './player';
+import { Game, Scene } from 'phaser';
 
 export class OfficeWorker extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body;
@@ -25,15 +27,11 @@ export class OfficeWorker extends Phaser.GameObjects.Sprite {
     this.body.setVelocity(100, 200);
     this.body.setBounce(1, 1);
     this.body.setCollideWorldBounds(true);
-    // .setGravityY(200);
 
-    // this.anims.play(this.key+'-back-walk', true);
-    // this.body.setVelocityX(Constants.officeNPCSpeed);
-
-    // this.anims.play(this.key + '-right-walk', true);
+    this.body.velocity.normalize().scale(Constants.playerSpeed);
   }
 
-  moveRight(): void {
-    // this.anims.play(this.key + '-right-walk', true);
+  stop() {
+    this.body.setVelocity(0)
   }
 }
