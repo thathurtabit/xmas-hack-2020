@@ -362,13 +362,13 @@ export default class Game extends Phaser.Scene {
       item.destroy(true);
       this.itemCounter.increment(1)
       if (this.itemCounter.currentItemTotal >= 10) {
-        const gameOverMusic = this.sound.add("round_end", {loop: true})
+        const gameOverMusic = this.sound.add("round_end", {loop: false})
         gameOverMusic.play();
       }
   }
 
   private onGameOver(): void {
-    const gameOverMusic = this.sound.add("death", {loop: true})
+    const gameOverMusic = this.sound.add("death", {loop: false})
     gameOverMusic.play();
     this.scene.start('gameOver');
   }
