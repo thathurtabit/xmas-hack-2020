@@ -38,7 +38,10 @@ export default class Game extends Phaser.Scene {
   }
 
   create(): void {
-    const levelMusic = this.sound.add("level 1 music", {loop: true})
+    const levelMusic = this.sound.add("level 1 music", {
+      loop: true,
+      volume: 0.5
+    })
     levelMusic.play();
 
     this.createAnims(this.anims, Constants.playerId);
