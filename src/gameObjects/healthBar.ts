@@ -1,5 +1,7 @@
 import 'phaser';
+import { GameObjects } from 'phaser';
 import { Constants } from '../utils/constants';
+import { OfficeWorker } from './officeWorker';
 
 export class HealthBar extends Phaser.GameObjects.GameObject {
   healthBar: Phaser.GameObjects.Graphics;
@@ -30,6 +32,11 @@ export class HealthBar extends Phaser.GameObjects.GameObject {
     }
 
     this.drawHealthBar();
+
+    const config: Phaser.Time.TimerEvent = new Phaser.Time.TimerEvent({
+      delay: 
+    } as Phaser.Types.Time.TimerEventConfig)
+    this.scene.time.addEvent(config)
 
     return this.healthBarValue === 0;
   }

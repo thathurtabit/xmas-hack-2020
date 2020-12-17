@@ -10,7 +10,7 @@ import PathFollower = Phaser.GameObjects.Components.PathFollower;
 import { HealthBar } from '../gameObjects/healthBar';
 import { Coffee } from '../gameObjects/coffee';
 import { HandGel } from '../gameObjects/handGel';
-import { FaceMask } from '../gameObjects/faceMask';
+import { Items } from '../gameObjects/items';
 import { ItemCounter } from '../gameObjects/itemCounter';
 
 export default class Game extends Phaser.Scene {
@@ -20,7 +20,7 @@ export default class Game extends Phaser.Scene {
   itemCounter: ItemCounter;
   coffees: Phaser.GameObjects.Group;
   handGels: Phaser.GameObjects.Group;
-  faceMasks: Phaser.GameObjects.Group;
+  items: Phaser.GameObjects.Group;
   healthBar: HealthBar;
   officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -34,15 +34,22 @@ export default class Game extends Phaser.Scene {
   preload(): void {
     this.loadTileMaps();
     this.loadImages();
+    this.loadAudio();
   }
 
   create(): void {
+    const levelMusic = this.sound.add("level 1 music", {
+      loop: true
+    })
+
+    levelMusic.play();
+
     this.createAnims(this.anims, Constants.playerId);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.camera = this.cameras.main;
     this.coffees = this.add.group();
     this.handGels = this.add.group();
-    this.faceMasks = this.add.group();
+    this.items = this.add.group();
     this.gameWidth = this.cameras.main.width;
 
     const map = this.make.tilemap({ key: 'map' });
@@ -118,19 +125,9 @@ export default class Game extends Phaser.Scene {
     const workerSpawn9 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-9');
     const workerSpawn10 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-10');
 
-    const workerSpawns = [
-      workerSpawn1,
-      workerSpawn2,
-      workerSpawn3,
-      workerSpawn4,
-      workerSpawn5,
-      workerSpawn6,
-      workerSpawn7,
-      workerSpawn8,
-      workerSpawn9,
-      workerSpawn10,
-    ];
-
+    const workerSpawns = [workerSpawn1, workerSpawn2, workerSpawn3, workerSpawn4, workerSpawn5, 
+                          workerSpawn6, workerSpawn7, workerSpawn8, workerSpawn9, workerSpawn10];
+                          
     this.player = new Player({
       scene: this,
       // @ts-ignore
@@ -142,13 +139,14 @@ export default class Game extends Phaser.Scene {
     this.player.init();
 
     this.createOfficeWorkers(floorLayer, collidingLayers, workerSpawns);
-
+    // this.officeWorkersTest = new OfficeWorkers(this, floorLayer, collidingLayers, workerSpawns)
+    
     this.healthBar = new HealthBar(this, 20, 20);
 
     this.itemCounter = new ItemCounter(this, this.gameWidth - 105, 15);
     this.spawnCoffees(map);
     this.spawnHandGels(map);
-    this.spawnFaceMasks(map);
+    this.spawnItems(map);
 
     this.player.body.velocity.normalize().scale(Constants.playerSpeed);
 
@@ -165,7 +163,7 @@ export default class Game extends Phaser.Scene {
     // Trigger event on overlap
     this.physics.add.overlap(this.player, this.coffees, this.drinkCoffee, null, this);
     this.physics.add.overlap(this.player, this.handGels, this.sanitise, null, this);
-    this.physics.add.overlap(this.player, this.faceMasks, this.sanitise, null, this);
+    this.physics.add.overlap(this.player, this.items, this.findItem, null, this);
 
     // Debug graphics
     // Press 'D' during play to see debug mode
@@ -288,8 +286,6 @@ export default class Game extends Phaser.Scene {
   }
 
   private createOfficeWorker(floorLayer, collidingLayers, id, x, y): OfficeWorker {
-    this.createAnims(this.anims, id);
-
     const officeWorker = new OfficeWorker({
       scene: this,
       key: id,
@@ -297,9 +293,12 @@ export default class Game extends Phaser.Scene {
       y: y,
     });
     officeWorker.init();
+    this.addOfficerWorkerPhysicsAndCollisions(officeWorker, floorLayer, collidingLayers);
+    return officeWorker;
+  }
 
 
-    // Add collisions to game objects
+  private addOfficerWorkerPhysicsAndCollisions(officeWorker: OfficeWorker, floorLayer: any, collidingLayers: any) {
     this.physics.add.collider(officeWorker, floorLayer);
     collidingLayers.forEach((layer) => {
       this.physics.add.collider(officeWorker, layer);
@@ -342,7 +341,6 @@ export default class Game extends Phaser.Scene {
   private drinkCoffee(player: Player, coffee: Coffee): void {
     coffee.destroy(true);
     player.speedUp();
-    this.itemCounter.increment(1);
   }
 
   private takeDamage(player: Player, collidingItem): void {
@@ -353,14 +351,19 @@ export default class Game extends Phaser.Scene {
 
   private sanitise(player: Player, item): void {
     item.destroy(true);
-    this.itemCounter.increment(1);
+    this.healthBar.decrease(-10)
   }
 
-  private decreaseHealth(amount) {
+  public decreaseHealth(amount) {
     if (this.healthBar.decrease(amount)) {
       this.isPlayerDead = true;
       this.onGameOver();
     }
+  }
+
+  private findItem(player: Player, item): void {
+      item.destroy(true);
+      this.itemCounter.increment(1)
   }
 
   private onGameOver(): void {
@@ -384,7 +387,20 @@ export default class Game extends Phaser.Scene {
   private loadImages() {
     this.load.image('coffee', 'assets/images/coffee.png');
     this.load.image('hand gel', 'assets/images/soap.png');
-    this.load.image('face mask', 'assets/images/mask.png');
+    this.load.image('face mask spawn', 'assets/images/mask.png');
+    this.load.image('fire extinguisher spawn', 'assets/images/fire extinguisher.png');
+    this.load.image('pool ball spawn', 'assets/images/pool balls.png');
+    this.load.image('paper spawn', 'assets/images/papers.png');
+    this.load.image('laptop spawn', 'assets/images/laptop.png');
+    this.load.image('donut spawn', 'assets/images/donut.png');
+    this.load.image('duck spawn', 'assets/images/duck.png');
+    this.load.image('scissor spawn', 'assets/images/scissors.png');
+    this.load.image('bottle spawn', 'assets/images/bottle.png');
+    this.load.image('phone spawn', 'assets/images/phone.png');
+  }
+
+  private loadAudio()  {
+    this.load.audio('level 1 music', 'assets/atlas/audio/music/level-1.wav');
   }
 
   private createAnims(anims, objectId) {
@@ -467,16 +483,24 @@ export default class Game extends Phaser.Scene {
     });
   }
 
-  private spawnFaceMasks(map: Phaser.Tilemaps.Tilemap) {
-    const faceMask1 = map.findObject('Objects', (obj) => obj.name === 'face mask 1');
-    const faceMask2 = map.findObject('Objects', (obj) => obj.name === 'face mask 2');
+  private spawnItems(map: Phaser.Tilemaps.Tilemap) {
+    const faceMask = map.findObject('Objects', (obj) => obj.name === 'face mask spawn');
+    const fireExtinguisher = map.findObject('Objects', (obj) => obj.name === 'fire extinguisher spawn');
+    const poolBall = map.findObject('Objects', (obj) => obj.name === 'pool ball spawn');
+    const paper = map.findObject('Objects', (obj) => obj.name === 'paper spawn');
+    const laptop = map.findObject('Objects', (obj) => obj.name === 'laptop spawn');
+    const donut = map.findObject('Objects', (obj) => obj.name === 'donut spawn');
+    const duck = map.findObject('Objects', (obj) => obj.name === 'duck spawn');
+    const scissor = map.findObject('Objects', (obj) => obj.name === 'scissor spawn');
+    const bottle = map.findObject('Objects', (obj) => obj.name === 'bottle spawn');
+    const phone = map.findObject('Objects', (obj) => obj.name === 'phone spawn');
 
-    const faceMaskSpawns = [faceMask1, faceMask2];
+    const itemSpawns = [faceMask, fireExtinguisher, poolBall, paper, laptop, donut, duck, scissor, bottle, phone];
 
-    faceMaskSpawns.forEach((faceMask, index: number) => {
-      this.faceMasks.add(
+    itemSpawns.forEach((item, index: number) => {
+      this.items.add(
         // @ts-ignore
-        new FaceMask({ scene: this, x: faceMask.x, y: faceMask.y, texture: 'face mask', delay: index }),
+        new Items({ scene: this, x: item.x, y: item.y, texture: item.name, delay: index }),
       );
     });
   }

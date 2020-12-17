@@ -1,5 +1,7 @@
 import { Constants } from './../utils/constants';
 import 'phaser';
+import { Player } from './player';
+import { Game, Scene } from 'phaser';
 
 export class OfficeWorker extends Phaser.GameObjects.Sprite {
   body: Phaser.Physics.Arcade.Body;
