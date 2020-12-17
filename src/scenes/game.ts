@@ -40,10 +40,10 @@ export default class Game extends Phaser.Scene {
 
   create(): void {
     if (!this.music) {
-      this.music = this.sound.add("level 1 music", {
+      this.music = this.sound.add('level 1 music', {
         loop: true,
-        volume: 0.5
-      })
+        volume: 0.5,
+      });
     }
     if (!this.music.isPlaying) {
       this.music.play();
@@ -133,18 +133,36 @@ export default class Game extends Phaser.Scene {
     const workerSpawn12 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-12');
     const workerSpawn13 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-13');
     const workerSpawn14 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-14');
-    const workerSpawn15= map.findObject('Objects', (obj) => obj.name === 'worker-spawn-15');
+    const workerSpawn15 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-15');
     const workerSpawn16 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-16');
     const workerSpawn17 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-17');
     const workerSpawn18 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-18');
     const workerSpawn19 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-19');
     const workerSpawn20 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-20');
 
-    const workerSpawns = [workerSpawn1, workerSpawn2, workerSpawn3, workerSpawn4, workerSpawn5, 
-                          workerSpawn6, workerSpawn7, workerSpawn8, workerSpawn9, workerSpawn10,
-                          workerSpawn11, workerSpawn12, workerSpawn13, workerSpawn14, workerSpawn15, 
-                          workerSpawn16, workerSpawn17, workerSpawn18, workerSpawn19, workerSpawn20];
-                          
+    const workerSpawns = [
+      workerSpawn1,
+      workerSpawn2,
+      workerSpawn3,
+      workerSpawn4,
+      workerSpawn5,
+      workerSpawn6,
+      workerSpawn7,
+      workerSpawn8,
+      workerSpawn9,
+      workerSpawn10,
+      workerSpawn11,
+      workerSpawn12,
+      workerSpawn13,
+      workerSpawn14,
+      workerSpawn15,
+      workerSpawn16,
+      workerSpawn17,
+      workerSpawn18,
+      workerSpawn19,
+      workerSpawn20,
+    ];
+
     this.player = new Player({
       scene: this,
       // @ts-ignore
@@ -157,7 +175,7 @@ export default class Game extends Phaser.Scene {
 
     this.createOfficeWorkers(floorLayer, collidingLayers, workerSpawns);
     // this.officeWorkersTest = new OfficeWorkers(this, floorLayer, collidingLayers, workerSpawns)
-    
+
     this.healthBar = new HealthBar(this, 20, 20);
 
     this.itemCounter = new ItemCounter(this, this.gameWidth - 105, 15);
@@ -202,33 +220,15 @@ export default class Game extends Phaser.Scene {
 
   private createOfficeWorkers(floorLayer, collidingLayers, spawns) {
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker1Id,
-        spawns[0].x,
-        spawns[0].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker1Id, spawns[0].x, spawns[0].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker2Id,
-        spawns[1].x,
-        spawns[1].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker2Id, spawns[1].x, spawns[1].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker3Id,
-        spawns[2].x,
-        spawns[2].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker3Id, spawns[2].x, spawns[2].y),
     );
 
     this.officeWorkers.push(
@@ -242,163 +242,67 @@ export default class Game extends Phaser.Scene {
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker5Id,
-        spawns[4].x,
-        spawns[4].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker5Id, spawns[4].x, spawns[4].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker6Id,
-        spawns[5].x,
-        spawns[5].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker6Id, spawns[5].x, spawns[5].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker7Id,
-        spawns[6].x,
-        spawns[6].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker7Id, spawns[6].x, spawns[6].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker8Id,
-        spawns[7].x,
-        spawns[7].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker8Id, spawns[7].x, spawns[7].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker9Id,
-        spawns[8].x,
-        spawns[8].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker9Id, spawns[8].x, spawns[8].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker10Id,
-        spawns[9].x,
-        spawns[9].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker10Id, spawns[9].x, spawns[9].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker1Id,
-        spawns[10].x,
-        spawns[10].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker1Id, spawns[10].x, spawns[10].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker2Id,
-        spawns[11].x,
-        spawns[11].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker2Id, spawns[11].x, spawns[11].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker3Id,
-        spawns[12].x,
-        spawns[12].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker3Id, spawns[12].x, spawns[12].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker4Id,
-        spawns[13].x,
-        spawns[13].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker4Id, spawns[13].x, spawns[13].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker5Id,
-        spawns[14].x,
-        spawns[14].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker5Id, spawns[14].x, spawns[14].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker6Id,
-        spawns[15].x,
-        spawns[15].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker6Id, spawns[15].x, spawns[15].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker7Id,
-        spawns[16].x,
-        spawns[16].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker7Id, spawns[16].x, spawns[16].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker8Id,
-        spawns[17].x,
-        spawns[17].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker8Id, spawns[17].x, spawns[17].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker9Id,
-        spawns[18].x,
-        spawns[18].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker9Id, spawns[18].x, spawns[18].y),
     );
 
     this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker10Id,
-        spawns[19].x,
-        spawns[19].y,
-      ),
+      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker10Id, spawns[19].x, spawns[19].y),
     );
   }
 
@@ -413,7 +317,6 @@ export default class Game extends Phaser.Scene {
     this.addOfficerWorkerPhysicsAndCollisions(officeWorker, floorLayer, collidingLayers);
     return officeWorker;
   }
-
 
   private addOfficerWorkerPhysicsAndCollisions(officeWorker: OfficeWorker, floorLayer: any, collidingLayers: any) {
     this.physics.add.collider(officeWorker, floorLayer);
@@ -435,15 +338,15 @@ export default class Game extends Phaser.Scene {
   }
 
   private playOfficeWorkerCollisionSfx(): void {
-    this.sound.add("office_worker_collision", {loop: false}).play();
+    this.sound.add('office_worker_collision', { loop: false }).play();
   }
 
   private playHandGelSfx(): void {
-    this.sound.add("hand_gel_squirt", {loop: false}).play();
+    this.sound.add('hand_gel_squirt', { loop: false }).play();
   }
 
   private playSlurpSfx(): void {
-    this.sound.add("slurp", {loop: false}).play();
+    this.sound.add('slurp', { loop: false }).play();
   }
 
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
@@ -477,7 +380,7 @@ export default class Game extends Phaser.Scene {
   private sanitise(player: Player, item): void {
     item.destroy(true);
     this.playHandGelSfx();
-    this.healthBar.decrease(-10)
+    this.healthBar.increase(10);
   }
 
   public decreaseHealth(amount) {
@@ -488,30 +391,30 @@ export default class Game extends Phaser.Scene {
   }
 
   private stopGameMusic() {
-    const mainMusic = this.sound.get("level 1 music")
+    const mainMusic = this.sound.get('level 1 music');
     mainMusic.stop();
   }
 
   private findItem(player: Player, item): void {
-      item.destroy(true);
-      this.itemCounter.increment(1)
-      if (this.itemCounter.currentItemTotal >= 10) {
-        this.stopGameMusic();
-        const roundEndMusic = this.sound.add("round_end", {loop: false})
-        roundEndMusic.play();
-        this.displayWinningScreen()
-      }
+    item.destroy(true);
+    this.itemCounter.increment(1);
+    if (this.itemCounter.currentItemTotal >= 10) {
+      this.stopGameMusic();
+      const roundEndMusic = this.sound.add('round_end', { loop: false });
+      roundEndMusic.play();
+      this.displayWinningScreen();
+    }
   }
 
   private onGameOver(): void {
     this.stopGameMusic();
-    const gameOverMusic = this.sound.add("death", {loop: false})
+    const gameOverMusic = this.sound.add('death', { loop: false });
     gameOverMusic.play();
     this.scene.start('gameOver');
   }
 
   private displayWinningScreen() {
-    this.scene.start("gameWon")
+    this.scene.start('gameWon');
   }
 
   private loadTileMaps() {
@@ -543,13 +446,13 @@ export default class Game extends Phaser.Scene {
     this.load.image('phone spawn', 'assets/images/phone.png');
   }
 
-  private loadAudio()  {
+  private loadAudio() {
     this.load.audio('level 1 music', 'assets/audio/music/level-1.wav');
-    this.load.audio('death', 'assets/audio/SFX/death.wav')
-    this.load.audio('round_end', 'assets/audio/SFX/round_end.wav')
-    this.load.audio('office_worker_collision', 'assets/audio/SFX/office_worker_collision.mp3')
-    this.load.audio('hand_gel_squirt', 'assets/audio/SFX/hand_gel_squirt.mp3')
-    this.load.audio('slurp', 'assets/audio/SFX/slurp.mp3')
+    this.load.audio('death', 'assets/audio/SFX/death.wav');
+    this.load.audio('round_end', 'assets/audio/SFX/round_end.wav');
+    this.load.audio('office_worker_collision', 'assets/audio/SFX/office_worker_collision.mp3');
+    this.load.audio('hand_gel_squirt', 'assets/audio/SFX/hand_gel_squirt.mp3');
+    this.load.audio('slurp', 'assets/audio/SFX/slurp.mp3');
   }
 
   private createAnims(anims, objectId) {
