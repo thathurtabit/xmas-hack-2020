@@ -138,7 +138,7 @@ export default class Game extends Phaser.Scene {
     });
     this.player.init();
 
-    this.createOfficeWorkers(this, floorLayer, collidingLayers, workerSpawns);
+    this.createOfficeWorkers(floorLayer, collidingLayers, workerSpawns);
     // this.officeWorkersTest = new OfficeWorkers(this, floorLayer, collidingLayers, workerSpawns)
     
     this.healthBar = new HealthBar(this, 20, 20);
@@ -183,88 +183,106 @@ export default class Game extends Phaser.Scene {
     });
   }
 
-  private createOfficeWorkers(context, floorLayer, collidingLayers, spawns) {
+  private createOfficeWorkers(floorLayer, collidingLayers, spawns) {
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker1Id,
+        spawns[0].x,
+        spawns[0].y,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker1Id, 
-      spawns[0].x,
-      spawns[0].y
-    ));
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker2Id,
+        spawns[1].x,
+        spawns[1].y,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker2Id, 
-      spawns[1].x,
-      spawns[1].y
-    ));
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker3Id,
+        spawns[2].x,
+        spawns[2].y,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker3Id, 
-      spawns[2].x,
-      spawns[2].y
-    ));
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker4Id,
+        spawns[3].x + 20,
+        spawns[3].y + 30,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker4Id, 
-      spawns[3].x + 20,
-      spawns[3].y + 30
-    ));
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker5Id,
+        spawns[4].x,
+        spawns[4].y,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker5Id, 
-      spawns[4].x,
-      spawns[4].y
-    ));
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker6Id,
+        spawns[5].x,
+        spawns[5].y,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker6Id, 
-      spawns[5].x,
-      spawns[5].y
-    ));
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker7Id,
+        spawns[6].x,
+        spawns[6].y,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker7Id,
-      spawns[6].x,
-      spawns[6].y
-    ));
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker8Id,
+        spawns[7].x,
+        spawns[7].y,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker8Id, 
-      spawns[7].x,
-      spawns[7].y
-    ));
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker9Id,
+        spawns[8].x,
+        spawns[8].y,
+      ),
+    );
 
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker9Id, 
-      spawns[8].x,
-      spawns[8].y
-    ));
-
-    this.officeWorkers.push(this.createOfficeWorker(
-      floorLayer, 
-      collidingLayers,
-      Constants.officeWorker10Id, 
-      spawns[9].x,
-      spawns[9].y
-    ));
-
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker10Id,
+        spawns[9].x,
+        spawns[9].y,
+      ),
+    );
   }
 
   private createOfficeWorker(floorLayer, collidingLayers, id, x, y): OfficeWorker {
@@ -287,6 +305,8 @@ export default class Game extends Phaser.Scene {
     });
 
     this.physics.add.overlap(this.player, officeWorker, this.onOfficeWorkerCollision, null, this);
+
+    return officeWorker;
   }
 
   private onOfficeWorkerCollision(player: Player, officeWorker: OfficeWorker): void {
