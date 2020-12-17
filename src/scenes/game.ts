@@ -365,6 +365,7 @@ export default class Game extends Phaser.Scene {
       if (this.itemCounter.currentItemTotal >= 10) {
         const roundEndMusic = this.sound.add("round_end", {loop: false})
         roundEndMusic.play();
+        this.displayWinningScreen()
       }
   }
 
@@ -372,6 +373,10 @@ export default class Game extends Phaser.Scene {
     const gameOverMusic = this.sound.add("death", {loop: false, volume: 7})
     gameOverMusic.play();
     this.scene.start('gameOver');
+  }
+
+  private displayWinningScreen() {
+    this.scene.start("gameWon")
   }
 
   private loadTileMaps() {
