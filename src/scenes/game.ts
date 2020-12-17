@@ -12,6 +12,7 @@ import { Coffee } from '../gameObjects/coffee';
 import { HandGel } from '../gameObjects/handGel';
 import { Items } from '../gameObjects/items';
 import { ItemCounter } from '../gameObjects/itemCounter';
+import AtlasJSONFileConfig = Phaser.Types.Loader.FileTypes.AtlasJSONFileConfig;
 
 export default class Game extends Phaser.Scene {
   isGameComplete = false;
@@ -21,8 +22,8 @@ export default class Game extends Phaser.Scene {
   coffees: Phaser.GameObjects.Group;
   handGels: Phaser.GameObjects.Group;
   items: Phaser.GameObjects.Group;
+  officeWorkers: Phaser.GameObjects.Group;
   healthBar: HealthBar;
-  officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   camera: Phaser.Cameras.Scene2D.Camera;
   gameWidth: number;
@@ -39,6 +40,8 @@ export default class Game extends Phaser.Scene {
   }
 
   create(): void {
+    this.physics.world.setBounds(0, 0, 1590, 1590)
+
     if (!this.music) {
       this.music = this.sound.add('level 1 music', {
         loop: true,
@@ -55,6 +58,7 @@ export default class Game extends Phaser.Scene {
     this.coffees = this.add.group();
     this.handGels = this.add.group();
     this.items = this.add.group();
+    this.officeWorkers = this.add.group();
     this.gameWidth = this.cameras.main.width;
 
     const map = this.make.tilemap({ key: 'map' });
@@ -174,7 +178,6 @@ export default class Game extends Phaser.Scene {
     this.player.init();
 
     this.createOfficeWorkers(floorLayer, collidingLayers, workerSpawns);
-    // this.officeWorkersTest = new OfficeWorkers(this, floorLayer, collidingLayers, workerSpawns)
 
     this.healthBar = new HealthBar(this, 20, 20);
 
@@ -219,91 +222,32 @@ export default class Game extends Phaser.Scene {
   }
 
   private createOfficeWorkers(floorLayer, collidingLayers, spawns) {
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker1Id, spawns[0].x, spawns[0].y),
-    );
+    const officeWorkerIds = [
+      Constants.officeWorker1Id,
+      Constants.officeWorker2Id,
+      Constants.officeWorker3Id,
+      Constants.officeWorker4Id,
+      Constants.officeWorker5Id,
+      Constants.officeWorker6Id,
+      Constants.officeWorker7Id,
+      Constants.officeWorker8Id,
+      Constants.officeWorker9Id,
+      Constants.officeWorker10Id,
+      Constants.officeWorker1Id,
+      Constants.officeWorker2Id,
+      Constants.officeWorker3Id,
+      Constants.officeWorker4Id,
+      Constants.officeWorker5Id,
+      Constants.officeWorker6Id,
+      Constants.officeWorker7Id,
+      Constants.officeWorker8Id,
+      Constants.officeWorker9Id,
+      Constants.officeWorker10Id,
+    ]
 
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker2Id, spawns[1].x, spawns[1].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker3Id, spawns[2].x, spawns[2].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(
-        floorLayer,
-        collidingLayers,
-        Constants.officeWorker4Id,
-        spawns[3].x + 20,
-        spawns[3].y + 30,
-      ),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker5Id, spawns[4].x, spawns[4].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker6Id, spawns[5].x, spawns[5].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker7Id, spawns[6].x, spawns[6].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker8Id, spawns[7].x, spawns[7].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker9Id, spawns[8].x, spawns[8].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker10Id, spawns[9].x, spawns[9].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker1Id, spawns[10].x, spawns[10].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker2Id, spawns[11].x, spawns[11].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker3Id, spawns[12].x, spawns[12].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker4Id, spawns[13].x, spawns[13].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker5Id, spawns[14].x, spawns[14].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker6Id, spawns[15].x, spawns[15].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker7Id, spawns[16].x, spawns[16].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker8Id, spawns[17].x, spawns[17].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker9Id, spawns[18].x, spawns[18].y),
-    );
-
-    this.officeWorkers.push(
-      this.createOfficeWorker(floorLayer, collidingLayers, Constants.officeWorker10Id, spawns[19].x, spawns[19].y),
-    );
+    officeWorkerIds.forEach((id, index) => {
+      this.createOfficeWorker(floorLayer, collidingLayers, id, spawns[index].x, spawns[index].y);
+    })
   }
 
   private createOfficeWorker(floorLayer, collidingLayers, id, x, y): OfficeWorker {
@@ -445,6 +389,7 @@ export default class Game extends Phaser.Scene {
 
     this.load.tilemapTiledJSON('map', 'assets/office/office-map.json');
     this.load.atlas(ObjectAtlasMappings.getMappings);
+
   }
 
   private loadImages() {
