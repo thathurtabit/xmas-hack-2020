@@ -1,17 +1,22 @@
-import { Constants } from '../utils/constants';
+import { Constants } from './../utils/constants';
 import 'phaser';
 
 export default class Splash extends Phaser.Scene {
   private logo = {
     name: 'logo',
+    image: undefined,
   };
-
+  private covid = {
+    name: 'covid',
+    image: undefined,
+  };
   constructor() {
     super('splash');
   }
 
   preload() {
     this.load.image(this.logo.name, 'assets/images/autotrader.png');
+    this.load.image(this.covid.name, 'assets/images/covid.png');
   }
 
   create() {
@@ -19,10 +24,12 @@ export default class Splash extends Phaser.Scene {
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
-    const logo = this.add.image(screenCenterX, 60, this.logo.name).setScale(0.5);
+    this.logo.image = this.add.image(screenCenterX, 60, this.logo.name).setScale(0.5);
+
+    this.covid.image = this.add.image(screenCenterX, 200, this.covid.name).setScale(0.5);
 
     this.add
-      .text(screenCenterX, screenCenterY - 30, `Perform tasks. Avoid contagion.`, {
+      .text(screenCenterX, screenCenterY + 30, `Collect ${Constants.totalItemsToCollectToWin} special items.`, {
         font: '30px Poppins',
         fill: '#fff',
       })
@@ -30,7 +37,7 @@ export default class Splash extends Phaser.Scene {
       .setAlign('center');
 
     this.add
-      .text(screenCenterX, screenCenterY + 30, `Stay Covid-Free.`, {
+      .text(screenCenterX, screenCenterY + 80, `Stay Covid-Free.`, {
         font: '40px Poppins',
         fill: '#fff',
       })
@@ -54,5 +61,9 @@ export default class Splash extends Phaser.Scene {
       },
       this,
     );
+  }
+
+  update(): void {
+    this.covid.image.angle += 0.5;
   }
 }
