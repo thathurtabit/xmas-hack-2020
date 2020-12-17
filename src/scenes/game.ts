@@ -121,9 +121,21 @@ export default class Game extends Phaser.Scene {
     const workerSpawn8 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-8');
     const workerSpawn9 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-9');
     const workerSpawn10 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-10');
+    const workerSpawn11 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-11');
+    const workerSpawn12 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-12');
+    const workerSpawn13 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-13');
+    const workerSpawn14 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-14');
+    const workerSpawn15= map.findObject('Objects', (obj) => obj.name === 'worker-spawn-15');
+    const workerSpawn16 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-16');
+    const workerSpawn17 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-17');
+    const workerSpawn18 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-18');
+    const workerSpawn19 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-19');
+    const workerSpawn20 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-20');
 
     const workerSpawns = [workerSpawn1, workerSpawn2, workerSpawn3, workerSpawn4, workerSpawn5, 
-                          workerSpawn6, workerSpawn7, workerSpawn8, workerSpawn9, workerSpawn10];
+                          workerSpawn6, workerSpawn7, workerSpawn8, workerSpawn9, workerSpawn10,
+                          workerSpawn11, workerSpawn12, workerSpawn13, workerSpawn14, workerSpawn15, 
+                          workerSpawn16, workerSpawn17, workerSpawn18, workerSpawn19, workerSpawn20];
                           
     this.player = new Player({
       scene: this,
@@ -278,6 +290,106 @@ export default class Game extends Phaser.Scene {
         Constants.officeWorker10Id,
         spawns[9].x,
         spawns[9].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker1Id,
+        spawns[10].x,
+        spawns[10].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker2Id,
+        spawns[11].x,
+        spawns[11].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker3Id,
+        spawns[12].x,
+        spawns[12].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker4Id,
+        spawns[13].x,
+        spawns[13].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker5Id,
+        spawns[14].x,
+        spawns[14].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker6Id,
+        spawns[15].x,
+        spawns[15].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker7Id,
+        spawns[16].x,
+        spawns[16].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker8Id,
+        spawns[17].x,
+        spawns[17].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker9Id,
+        spawns[18].x,
+        spawns[18].y,
+      ),
+    );
+
+    this.officeWorkers.push(
+      this.createOfficeWorker(
+        floorLayer,
+        collidingLayers,
+        Constants.officeWorker10Id,
+        spawns[19].x,
+        spawns[19].y,
       ),
     );
   }
