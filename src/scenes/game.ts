@@ -308,10 +308,18 @@ export default class Game extends Phaser.Scene {
 
   private onOfficeWorkerCollision(player: Player, officeWorker): void {
     if (!officeWorker.isPaused()) {
-      this.sound.add("office_worker_collision", {loop: false}).play();
+      this.playOfficeWorkerCollisionSfx();
       officeWorker.pause(3000);
       this.decreaseHealth(20);
     }
+  }
+
+  private playOfficeWorkerCollisionSfx(): void {
+    this.sound.add("office_worker_collision", {loop: false}).play();
+  }
+
+  private playHandGelSfx(): void {
+    this.sound.add("hand_gel_squirt", {loop: false}).play();
   }
 
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
@@ -341,14 +349,9 @@ export default class Game extends Phaser.Scene {
     player.speedUp();
   }
 
-  private takeDamage(player: Player, collidingItem): void {
-    //item.disableBody(true, true);
-    // Switch between different health decrements based on collidingItem
-    this.decreaseHealth(20);
-  }
-
   private sanitise(player: Player, item): void {
     item.destroy(true);
+    this.playHandGelSfx();
     this.healthBar.decrease(-10)
   }
 
@@ -408,6 +411,7 @@ export default class Game extends Phaser.Scene {
     this.load.audio('death', 'assets/audio/SFX/death.wav')
     this.load.audio('round_end', 'assets/audio/SFX/round_end.wav')
     this.load.audio('office_worker_collision', 'assets/audio/SFX/office_worker_collision.mp3')
+    this.load.audio('hand_gel_squirt', 'assets/audio/SFX/hand_gel_squirt.mp3')
   }
 
   private createAnims(anims, objectId) {
