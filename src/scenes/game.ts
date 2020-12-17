@@ -308,6 +308,7 @@ export default class Game extends Phaser.Scene {
 
   private onOfficeWorkerCollision(player: Player, officeWorker): void {
     if (!officeWorker.isPaused()) {
+      this.sound.add("office_worker_collision", {loop: false}).play();
       officeWorker.pause(3000);
       this.decreaseHealth(20);
     }
@@ -370,6 +371,7 @@ export default class Game extends Phaser.Scene {
         this.stopGameMusic();
         const roundEndMusic = this.sound.add("round_end", {loop: false})
         roundEndMusic.play();
+        this.displayWinningScreen()
       }
   }
 
@@ -378,6 +380,10 @@ export default class Game extends Phaser.Scene {
     const gameOverMusic = this.sound.add("death", {loop: false})
     gameOverMusic.play();
     this.scene.start('gameOver');
+  }
+
+  private displayWinningScreen() {
+    this.scene.start("gameWon")
   }
 
   private loadTileMaps() {
@@ -413,6 +419,7 @@ export default class Game extends Phaser.Scene {
     this.load.audio('level 1 music', 'assets/audio/music/level-1.wav');
     this.load.audio('death', 'assets/audio/SFX/death.wav')
     this.load.audio('round_end', 'assets/audio/SFX/round_end.wav')
+    this.load.audio('office_worker_collision', 'assets/audio/SFX/office_worker_collision.mp3')
   }
 
   private createAnims(anims, objectId) {
