@@ -309,15 +309,11 @@ export default class Game extends Phaser.Scene {
     return officeWorker;
   }
 
-  private onOfficeWorkerCollision(player: Player, officeWorker: OfficeWorker): void {
-    console.log('COLLISION!');
-
-    officeWorker.stop()
-    this.decreaseHealth(20);
-  }
-
-  private resumePausedOfficeWorker(officeWorker) {
-    officeWorker.resumeFollow();
+  private onOfficeWorkerCollision(player: Player, officeWorker): void {
+    if (!officeWorker.isPaused()) {
+      officeWorker.pause(3000);
+      this.decreaseHealth(20);
+    }
   }
 
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
