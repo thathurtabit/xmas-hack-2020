@@ -30,7 +30,7 @@ export class Constants {
   public static get officeWorker10Id(): string {
     return 'officeWorker10Atlas';
   }
-  
+
   public static get playerId(): string {
     return 'playerAtlas';
   }
@@ -81,6 +81,11 @@ export class Constants {
   }
   public static get coffeeDrawScale(): number {
     return 0.25;
+  }
+
+  // Items
+  public static get totalItemsToCollectToWin(): number {
+    return 20;
   }
 
   // OfficeWorker
