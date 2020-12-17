@@ -38,10 +38,7 @@ export default class Game extends Phaser.Scene {
   }
 
   create(): void {
-    const levelMusic = this.sound.add("level 1 music", {
-      loop: true
-    })
-
+    const levelMusic = this.sound.add("level 1 music", {loop: true})
     levelMusic.play();
 
     this.createAnims(this.anims, Constants.playerId);
@@ -364,9 +361,15 @@ export default class Game extends Phaser.Scene {
   private findItem(player: Player, item): void {
       item.destroy(true);
       this.itemCounter.increment(1)
+      if (this.itemCounter.currentItemTotal >= 10) {
+        const gameOverMusic = this.sound.add("round_end", {loop: true})
+        gameOverMusic.play();
+      }
   }
 
   private onGameOver(): void {
+    const gameOverMusic = this.sound.add("death", {loop: true})
+    gameOverMusic.play();
     this.scene.start('gameOver');
   }
 
@@ -400,7 +403,9 @@ export default class Game extends Phaser.Scene {
   }
 
   private loadAudio()  {
-    this.load.audio('level 1 music', 'assets/atlas/audio/music/level-1.wav');
+    this.load.audio('level 1 music', 'assets/audio/music/level-1.wav');
+    this.load.audio('death', 'assets/audio/SFX/death.wav')
+    this.load.audio('round_end', 'assets/audio/SFX/round_end.wav')
   }
 
   private createAnims(anims, objectId) {
