@@ -298,7 +298,6 @@ export default class Game extends Phaser.Scene {
     });
     officeWorker.init();
 
-    officeWorker.body.velocity.normalize().scale(Constants.playerSpeed);
 
     // Add collisions to game objects
     this.physics.add.collider(officeWorker, floorLayer);
@@ -312,19 +311,10 @@ export default class Game extends Phaser.Scene {
   }
 
   private onOfficeWorkerCollision(player: Player, officeWorker): void {
-    console.log('COLLISION!');
-    this.decreaseHealth(20);
-
-    // if (officeWorker.isFollowing()) {
-    //   officeWorker.pauseFollow();
-    //   this.decreaseHealth(10);
-
-    //   this.time.delayedCall(3000, this.resumePausedOfficeWorker, [ officeWorker ], this);
-    // }
-  }
-
-  private resumePausedOfficeWorker(officeWorker) {
-    officeWorker.resumeFollow();
+    if (!officeWorker.isPaused()) {
+      officeWorker.pause(3000);
+      this.decreaseHealth(20);
+    }
   }
 
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
@@ -334,7 +324,6 @@ export default class Game extends Phaser.Scene {
   }
 
   update(): void {
-    this.officeWorkers[0].moveRight();
     // Move player / camera
     if (this.cursors.left.isDown) {
       this.player.moveLeft();
