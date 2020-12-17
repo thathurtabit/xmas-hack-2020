@@ -123,49 +123,37 @@ export default class Game extends Phaser.Scene {
     const playerSpawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
 
     // Office worker spawns
-    const workerSpawn1 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-1');
-    const workerSpawn2 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-2');
-    const workerSpawn3 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-3');
-    const workerSpawn4 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-4');
-    const workerSpawn5 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-5');
-    const workerSpawn6 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-6');
-    const workerSpawn7 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-7');
-    const workerSpawn8 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-8');
-    const workerSpawn9 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-9');
-    const workerSpawn10 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-10');
-    const workerSpawn11 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-11');
-    const workerSpawn12 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-12');
-    const workerSpawn13 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-13');
-    const workerSpawn14 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-14');
-    const workerSpawn15 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-15');
-    const workerSpawn16 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-16');
-    const workerSpawn17 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-17');
-    const workerSpawn18 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-18');
-    const workerSpawn19 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-19');
-    const workerSpawn20 = map.findObject('Objects', (obj) => obj.name === 'worker-spawn-20');
-
-    const workerSpawns = [
-      workerSpawn1,
-      workerSpawn2,
-      workerSpawn3,
-      workerSpawn4,
-      workerSpawn5,
-      workerSpawn6,
-      workerSpawn7,
-      workerSpawn8,
-      workerSpawn9,
-      workerSpawn10,
-      workerSpawn11,
-      workerSpawn12,
-      workerSpawn13,
-      workerSpawn14,
-      workerSpawn15,
-      workerSpawn16,
-      workerSpawn17,
-      workerSpawn18,
-      workerSpawn19,
-      workerSpawn20,
-    ];
+    const workerSpawns = []
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-1'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-2'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-3'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-4'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-5'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-6'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-7'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-8'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-9'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-10'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-11'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-12'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-13'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-14'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-15'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-16'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-17'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-18'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-19'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-20'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-21'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-22'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-23'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-24'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-25'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-26'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-27'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-28'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-29'));
+    workerSpawns.push(map.findObject('Objects', (obj) => obj.name === 'worker-spawn-30'));
 
     this.player = new Player({
       scene: this,
@@ -243,6 +231,16 @@ export default class Game extends Phaser.Scene {
       Constants.officeWorker8Id,
       Constants.officeWorker9Id,
       Constants.officeWorker10Id,
+      Constants.officeWorker1Id,
+      Constants.officeWorker2Id,
+      Constants.officeWorker3Id,
+      Constants.officeWorker4Id,
+      Constants.officeWorker5Id,
+      Constants.officeWorker6Id,
+      Constants.officeWorker7Id,
+      Constants.officeWorker8Id,
+      Constants.officeWorker9Id,
+      Constants.officeWorker10Id
     ]
 
     officeWorkerIds.forEach((id, index) => {
