@@ -358,17 +358,24 @@ export default class Game extends Phaser.Scene {
     }
   }
 
+  private stopGameMusic() {
+    const mainMusic = this.sound.get("level-1")
+    mainMusic.stop();
+  }
+
   private findItem(player: Player, item): void {
       item.destroy(true);
       this.itemCounter.increment(1)
       if (this.itemCounter.currentItemTotal >= 10) {
+        this.stopGameMusic();
         const roundEndMusic = this.sound.add("round_end", {loop: false})
         roundEndMusic.play();
       }
   }
 
   private onGameOver(): void {
-    const gameOverMusic = this.sound.add("death", {loop: false, volume: 7})
+    this.stopGameMusic();
+    const gameOverMusic = this.sound.add("death", {loop: false})
     gameOverMusic.play();
     this.scene.start('gameOver');
   }
