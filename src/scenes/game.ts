@@ -26,6 +26,7 @@ export default class Game extends Phaser.Scene {
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   camera: Phaser.Cameras.Scene2D.Camera;
   gameWidth: number;
+  music: Phaser.Sound.BaseSound;
 
   constructor() {
     super('game');
@@ -38,8 +39,15 @@ export default class Game extends Phaser.Scene {
   }
 
   create(): void {
-    const levelMusic = this.sound.add("level 1 music", {loop: true})
-    levelMusic.play();
+    if (!this.music) {
+      this.music = this.sound.add("level 1 music", {
+        loop: true,
+        volume: 0.5
+      })
+    }
+    if (!this.music.isPlaying) {
+      this.music.play();
+    }
 
     this.createAnims(this.anims, Constants.playerId);
     this.cursors = this.input.keyboard.createCursorKeys();
