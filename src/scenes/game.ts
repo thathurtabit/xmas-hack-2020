@@ -330,6 +330,10 @@ export default class Game extends Phaser.Scene {
     this.sound.add("hand_gel_squirt", {loop: false}).play();
   }
 
+  private playSlurpSfx(): void {
+    this.sound.add("slurp", {loop: false}).play();
+  }
+
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
     collidingLayers.forEach((layer) => {
       layer.setCollisionByProperty({ collides: true });
@@ -353,6 +357,7 @@ export default class Game extends Phaser.Scene {
   }
 
   private drinkCoffee(player: Player, coffee: Coffee): void {
+    this.playSlurpSfx();
     coffee.destroy(true);
     player.speedUp();
   }
@@ -432,6 +437,7 @@ export default class Game extends Phaser.Scene {
     this.load.audio('round_end', 'assets/audio/SFX/round_end.wav')
     this.load.audio('office_worker_collision', 'assets/audio/SFX/office_worker_collision.mp3')
     this.load.audio('hand_gel_squirt', 'assets/audio/SFX/hand_gel_squirt.mp3')
+    this.load.audio('slurp', 'assets/audio/SFX/slurp.mp3')
   }
 
   private createAnims(anims, objectId) {
