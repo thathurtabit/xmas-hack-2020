@@ -1,6 +1,6 @@
 import 'phaser';
 
-export class FaceMask extends Phaser.GameObjects.Image {
+export class Items extends Phaser.GameObjects.Image {
   delay: number;
 
   constructor(params) {
@@ -8,7 +8,7 @@ export class FaceMask extends Phaser.GameObjects.Image {
     this.x = params.x;
     this.y = params.y;
     this.texture = params.texture;
-    this.scale = 2;
+    this.scale = 1;
     this.delay = params.delay;
 
     this.scene.add.existing(this);

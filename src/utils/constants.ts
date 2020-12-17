@@ -85,7 +85,7 @@ export class Constants {
 
   // Items
   public static get totalItemsToCollectToWin(): number {
-    return 20;
+    return 10;
   }
 
   // OfficeWorker
