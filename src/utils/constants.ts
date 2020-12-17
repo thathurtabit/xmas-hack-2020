@@ -1,10 +1,34 @@
 export class Constants {
   // Object ids
-  public static get officeWorkerOneId(): string {
-    return 'officeWorkerOneAtlas';
+  public static get officeWorker1Id(): string {
+    return 'officeWorker1Atlas';
   }
-  public static get officeWorkerTwoId(): string {
-    return 'officeWorkerTwoAtlas';
+  public static get officeWorker2Id(): string {
+    return 'officeWorker2Atlas';
+  }
+  public static get officeWorker3Id(): string {
+    return 'officeWorker3Atlas';
+  }
+  public static get officeWorker4Id(): string {
+    return 'officeWorker4Atlas';
+  }
+  public static get officeWorker5Id(): string {
+    return 'officeWorker5Atlas';
+  }
+  public static get officeWorker6Id(): string {
+    return 'officeWorker6Atlas';
+  }
+  public static get officeWorker7Id(): string {
+    return 'officeWorker7Atlas';
+  }
+  public static get officeWorker8Id(): string {
+    return 'officeWorker8Atlas';
+  }
+  public static get officeWorker9Id(): string {
+    return 'officeWorker9Atlas';
+  }
+  public static get officeWorker10Id(): string {
+    return 'officeWorker10Atlas';
   }
   
   public static get playerId(): string {
