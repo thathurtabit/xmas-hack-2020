@@ -5,12 +5,18 @@ export default class GameWon extends Phaser.Scene {
     name: 'logo',
   };
 
+  private trophy = {
+    name: 'trophy',
+    image: undefined,
+  };
+
   constructor() {
     super('gameWon');
   }
 
   preload() {
     this.load.image(this.logo.name, 'assets/images/autotrader.png');
+    this.load.image(this.trophy.name, 'assets/images/trophy.png');
   }
 
   create() {
@@ -19,17 +25,23 @@ export default class GameWon extends Phaser.Scene {
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
     this.add.image(screenCenterX, 60, this.logo.name).setScale(0.5);
+    this.trophy.image = this.add.image(screenCenterX, 140, this.trophy.name).setScale(0.25);
 
     this.add
-      .text(screenCenterX, screenCenterY - 30, `Congratulations! You've managed to find\n all 10 hidden items whilst avoiding covid!`, {
-        font: '30px Poppins',
-        fill: '#fff',
-      })
+      .text(
+        screenCenterX,
+        screenCenterY - 30,
+        `Congratulations!\nYou found all 10 hidden items\nwhilst avoiding covid!`,
+        {
+          font: '25px Poppins',
+          fill: '#fff',
+        },
+      )
       .setOrigin(0.5)
       .setAlign('center');
 
     this.add
-      .text(screenCenterX, screenCenterY + 30, `You win!`, {
+      .text(screenCenterX, screenCenterY + 70, `You win!`, {
         font: '40px Poppins',
         fill: '#fff',
       })
@@ -55,5 +67,14 @@ export default class GameWon extends Phaser.Scene {
       },
       this,
     );
+
+    this.tweens.add({
+      targets: this.trophy.image,
+      alpha: { from: 0.1, to: 1 },
+      ease: 'Linear',
+      duration: 500,
+      repeat: 3,
+      yoyo: false,
+    });
   }
 }

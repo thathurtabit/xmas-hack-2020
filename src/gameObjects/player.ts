@@ -24,6 +24,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.displayOriginY = 0.5;
 
     this.setScale(Constants.playerDrawScale, Constants.playerDrawScale);
+    //this.body.collideWorldBounds = true; // - This causes physics problem
 
     this.scene.add.existing(this);
   }
@@ -39,22 +40,22 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   moveUp(): void {
-    this.anims.play(this.key+'-back-walk', true);
+    this.anims.play(this.key + '-back-walk', true);
     this.body.setVelocityY(-this.playerSpeed);
   }
 
   moveDown(): void {
-    this.anims.play(this.key+'-front-walk', true);
+    this.anims.play(this.key + '-front-walk', true);
     this.body.setVelocityY(this.playerSpeed);
   }
 
   moveLeft(): void {
-    this.anims.play(this.key+'-left-walk', true);
+    this.anims.play(this.key + '-left-walk', true);
     this.body.setVelocityX(-this.playerSpeed);
   }
 
   moveRight(): void {
-    this.anims.play(this.key+'-right-walk', true);
+    this.anims.play(this.key + '-right-walk', true);
     this.body.setVelocityX(this.playerSpeed);
   }
 

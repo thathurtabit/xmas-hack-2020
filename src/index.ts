@@ -3,7 +3,6 @@ import Game from './scenes/game';
 import GameOver from './scenes/gameOver';
 import Splash from './scenes/splash';
 import GameWon from './scenes/gameWon';
-//import Splash from './scenes/splash';
 
 const config = {
   type: Phaser.AUTO,
