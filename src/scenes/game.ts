@@ -451,7 +451,7 @@ export default class Game extends Phaser.Scene {
   }
 
   private loadAudio() {
-    this.load.audio('level 1 music', 'assets/audio/music/level-1.wav');
+    this.load.audio('level 1 music', 'assets/audio/music/level-1.mp3');
     this.load.audio('death', 'assets/audio/SFX/death.wav');
     this.load.audio('round_end', 'assets/audio/SFX/round_end.wav');
     this.load.audio('office_worker_collision', 'assets/audio/SFX/office_worker_collision.mp3');
