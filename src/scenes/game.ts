@@ -11,12 +11,13 @@ import { HealthBar } from '../gameObjects/healthBar';
 import { Coffee } from '../gameObjects/coffee';
 import { HandGel } from '../gameObjects/handGel';
 import { FaceMask } from '../gameObjects/faceMask';
-import { OfficeWorkers } from '../gameObjects/officeWorkers';
+import { ItemCounter } from '../gameObjects/itemCounter';
 
 export default class Game extends Phaser.Scene {
   isGameComplete = false;
   isPlayerDead = false;
   player: Player;
+  itemCounter: ItemCounter;
   coffees: Phaser.GameObjects.Group;
   handGels: Phaser.GameObjects.Group;
   faceMasks: Phaser.GameObjects.Group;
@@ -24,7 +25,7 @@ export default class Game extends Phaser.Scene {
   officeWorkers: OfficeWorker[] = [];
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   camera: Phaser.Cameras.Scene2D.Camera;
-  officeWorkersTest: OfficeWorkers
+  gameWidth: number;
 
   constructor() {
     super('game');
@@ -49,6 +50,7 @@ export default class Game extends Phaser.Scene {
     this.coffees = this.add.group();
     this.handGels = this.add.group();
     this.faceMasks = this.add.group();
+    this.gameWidth = this.cameras.main.width;
 
     const map = this.make.tilemap({ key: 'map' });
 
@@ -140,11 +142,8 @@ export default class Game extends Phaser.Scene {
     // this.officeWorkersTest = new OfficeWorkers(this, floorLayer, collidingLayers, workerSpawns)
     
     this.healthBar = new HealthBar(this, 20, 20);
-    // this.addCoffee();
-    // this.addHandGel();
-    // this.addFaceMask();
-    // this.officeWorkersTest.createOfficeWorkers()
 
+    this.itemCounter = new ItemCounter(this, this.gameWidth - 105, 15);
     this.spawnCoffees(map);
     this.spawnHandGels(map);
     this.spawnFaceMasks(map);
@@ -326,6 +325,7 @@ export default class Game extends Phaser.Scene {
   private drinkCoffee(player: Player, coffee: Coffee): void {
     coffee.destroy(true);
     player.speedUp();
+    this.itemCounter.increment(1);
   }
 
   private takeDamage(player: Player, collidingItem): void {
@@ -336,7 +336,7 @@ export default class Game extends Phaser.Scene {
 
   private sanitise(player: Player, item): void {
     item.destroy(true);
-    this.decreaseHealth(-20);
+    this.itemCounter.increment(1);
   }
 
   public decreaseHealth(amount) {
