@@ -349,6 +349,10 @@ export default class Game extends Phaser.Scene {
     this.sound.add('slurp', { loop: false }).play();
   }
 
+  private playItemFoundSfx(): void {
+    this.sound.add('ding', { loop: false }).play();
+  }
+
   private setCollision(collidingLayers: Array<StaticTilemapLayer>) {
     collidingLayers.forEach((layer) => {
       layer.setCollisionByProperty({ collides: true });
@@ -395,6 +399,7 @@ export default class Game extends Phaser.Scene {
   }
 
   private findItem(player: Player, item): void {
+    this.playItemFoundSfx();
     item.destroy(true);
     this.itemCounter.increment(1);
     if (this.itemCounter.currentItemTotal >= 10) {
@@ -452,6 +457,7 @@ export default class Game extends Phaser.Scene {
     this.load.audio('office_worker_collision', 'assets/audio/SFX/office_worker_collision.mp3');
     this.load.audio('hand_gel_squirt', 'assets/audio/SFX/hand_gel_squirt.mp3');
     this.load.audio('slurp', 'assets/audio/SFX/slurp.mp3');
+    this.load.audio('ding', 'assets/audio/SFX/ding.mp3');
   }
 
   private createAnims(anims, objectId) {
